@@ -9,7 +9,7 @@ Samuel Kordik's personal hub: EMS leader, data analyst, educator, and a **creati
 - [x] Phase 0: repo init, WP archive, conversion script, design rounds 1–3
 - [x] Phase 1: positioning + IA (Night shift palette, Barlow Semi Condensed + Barlow, hero line C1)
 - [~] Phase 2: build. Site builds and all old URLs resolve. Waiting on Samuel's photos (3D prints, pets, travel, blurred family) and a review of new copy
-- [ ] Phase 3: DNS cutover, retire Nixihost
+- [~] Phase 3: repo https://github.com/samuelkordik/samuelkordik.com is live and Pages deploys on every push to `main`. The preview domain `new.samuelkordik.com` is set in Pages and waits on Samuel's Cloudflare CNAME (`new` → `samuelkordik.github.io`, DNS only). Then: enforce HTTPS, verify the domain in GitHub, and later cut the apex over and retire Nixihost.
 
 ## Stack & conventions
 - **Astro** + MDX content collections (`src/content/{writing,work,teaching,guides}`), zod schemas in `src/content.config.ts`. Resume data lives in `src/data/resume.yaml`.
