@@ -1,0 +1,46 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import WorkCard from '../../components/WorkCard.astro';
+import { yearsInEms } from '../../data/site';
+
+const work = (await getCollection('work', (e) => !e.data.draft)).sort((a, b) => a.data.order - b.data.order || b.data.year - a.data.year);
+const media = [...new Set(work.flatMap((w) => w.data.media))];
+---
+<Base title="Work" description="Selected projects in EMS quality, data analysis, research, design, photography and video.">
+  <div class="wrap">
+    <header class="page-head">
+      <p class="eyebrow">Work</p>
+      <h1>Improving EMS quality, one project at a time.</h1>
+      <p class="lede">Selected projects from {yearsInEms()} years in EMS, from dashboards and clinical research to report design, photography, video, and code.</p>
+    </header>
+    <div class="filters no-print" role="group" aria-label="Filter by medium" hidden>
+      <button type="button" aria-pressed="true" data-filter="all">All</button>
+      {media.map((m) => <button type="button" aria-pressed="false" data-filter={m}>{m}</button>)}
+    </div>
+    <div class="work-grid">
+      {work.map((w, i) => <div data-media={w.data.media.join(' ')}><WorkCard entry={w} eager={i < 3} /></div>)}
+    </div>
+  </div>
+</Base>
+<script>
+  const bar = document.querySelector<HTMLElement>('.filters');
+  if (bar) {
+    bar.hidden = false;
+    const items = document.querySelectorAll<HTMLElement>('[data-media]');
+    bar.addEventListener('click', (e) => {
+      const btn = (e.target as HTMLElement).closest('button');
+      if (!btn) return;
+      const f = btn.dataset.filter!;
+      bar.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+      items.forEach((el) => (el.hidden = f !== 'all' && !el.dataset.media!.split(' ').includes(f)));
+    });
+  }
+</script>
+<style>
+  .filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 40px; }
+  .filters button { font: 600 0.8125rem/1 var(--body); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); background: none; border: 1px solid var(--rule); padding: 9px 14px; border-radius: 999px; cursor: pointer; }
+  .filters button:hover { color: var(--ink); border-color: var(--muted); }
+  .filters button[aria-pressed='true'] { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+  [data-media][hidden] { display: none; }
+</style>

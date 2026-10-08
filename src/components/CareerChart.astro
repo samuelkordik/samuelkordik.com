@@ -1,0 +1,87 @@
+---
+// Career-by-discipline timeline drawn from src/data/resume.yaml. "Present" spans run to today.
+import { resume, type Span } from '../data/resume';
+
+const { timeline } = resume;
+
+const now = new Date();
+const start = timeline.start;
+const end = now.getFullYear() + (now.getMonth() + 1) / 12;
+const W = 1160, X0 = 150, X1 = 1110, BAR = 14, CHAR = 6.9, PAD = 12;
+const x = (y: number) => X0 + ((y - start) / (end - start)) * (X1 - X0);
+
+// Lay out labels per lane: try row 0 (just above the bar), bump to higher rows on overlap.
+let top = 22;
+const lanes = timeline.lanes.map((lane) => {
+  const rows: number[][] = [];
+  const labels = (lane.milestones ?? []).map((m) => {
+    const lx = x(m.year) + (m.marker === false ? 0 : PAD);
+    const w = m.label.length * CHAR;
+    let anchorEnd = lx + w > W;
+    const from = anchorEnd ? x(m.year) - PAD - w : lx;
+    let row = 0;
+    while ((rows[row] ?? []).some((r) => from < r + 10)) row++;
+    (rows[row] ??= []).push(from + w);
+    return { ...m, lx: anchorEnd ? x(m.year) - PAD : lx, anchorEnd, row };
+  });
+  const nRows = Math.max(1, rows.length);
+  const barY = top + 14 * nRows + 8;
+  top = barY + BAR + 20;
+  return { ...lane, labels, barY };
+});
+const axisY = top;
+const H = axisY + 30;
+const ticks = [start, ...Array.from({ length: 10 }, (_, i) => Math.ceil(start / 5) * 5 + i * 5).filter((t) => t > start + 2 && t < end)];
+const fmt = (s: Span) => `${s.start}–${s.end ?? 'present'}`;
+---
+<figure class="career-chart">
+  <figcaption><b>Career by discipline, {start}–{now.getFullYear()}</b><span>solid: primary focus · light: alongside other work</span></figcaption>
+  <div class="scroll">
+    <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-labelledby="career-desc">
+      <desc id="career-desc">Timeline of Samuel Kordik’s career by discipline from {start} to the present.</desc>
+      {ticks.map((t) => <line class="grid" x1={x(t)} y1={10} x2={x(t)} y2={axisY} />)}
+      <line class="axis" x1={X0} y1={axisY} x2={X1} y2={axisY} />
+      {ticks.map((t) => <text class="lab" x={x(t)} y={axisY + 22} text-anchor="middle">{t}</text>)}
+      {lanes.map((lane) => (
+        <g>
+          <text class="lab" x="0" y={lane.barY + 11}>{lane.label}</text>
+          {lane.spans.map((s) => (
+            <rect class:list={[s.kind, { creative: lane.creative }]} x={x(s.start)} y={lane.barY} width={Math.max(4, x(s.end ?? end) - x(s.start))} height={BAR} />
+          ))}
+          {lane.labels.filter((m) => m.marker !== false).map((m) => <circle class="dot" cx={x(m.year)} cy={lane.barY + BAR / 2} r="6" />)}
+          {lane.labels.map((m) => (
+            <text class="ann" x={m.lx} y={lane.barY - 7 - m.row * 14} text-anchor={m.anchorEnd ? 'end' : 'start'}>{m.label}</text>
+          ))}
+        </g>
+      ))}
+    </svg>
+  </div>
+  <ul class="legend" aria-hidden="true">
+    <li><i class="solid"></i>Primary focus</li><li><i class="light"></i>Alongside other work</li><li><i class="solid creative"></i>Creative lane</li>
+  </ul>
+  <ul class="sr-only">
+    {timeline.lanes.map((l) => (
+      <li>{l.label}: {l.spans.map(fmt).join(', ')}.{l.milestones?.length ? ` Milestones: ${l.milestones.map((m) => `${m.year} ${m.label}`).join('; ')}.` : ''}</li>
+    ))}
+  </ul>
+</figure>
+
+<style>
+  .career-chart { margin: 0; background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; padding: 22px 24px 16px; }
+  figcaption { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 16px; font: 400 0.8125rem/1.4 var(--mono); color: var(--muted); margin-bottom: 12px; }
+  figcaption b { color: var(--ink); font-weight: 400; }
+  .scroll { overflow-x: auto; }
+  svg { min-width: 780px; width: 100%; }
+  text { font-family: var(--mono); font-size: 12px; fill: var(--ink); }
+  .lab { fill: var(--muted); }
+  .ann { font-size: 11.5px; }
+  .grid { stroke: var(--rule); }
+  .axis { stroke: var(--muted); }
+  rect.solid, i.solid { fill: var(--sage); background: var(--sage); }
+  rect.light, i.light { fill: var(--sage); fill-opacity: 0.3; background: var(--sage); opacity: 0.3; }
+  rect.creative, i.creative { fill: var(--accent); background: var(--accent); }
+  .dot { fill: var(--surface); stroke: var(--ink); stroke-width: 2; }
+  .legend { display: flex; flex-wrap: wrap; gap: 8px 20px; list-style: none; margin: 10px 0 0; padding: 0; font-size: 0.84375rem; color: var(--muted); }
+  .legend i { display: inline-block; width: 22px; height: 10px; margin-right: 8px; vertical-align: middle; }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+</style>

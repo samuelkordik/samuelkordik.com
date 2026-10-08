@@ -1,0 +1,16 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+interface Props { entry: CollectionEntry<'work'>; eager?: boolean }
+const { entry, eager = false } = Astro.props;
+const d = entry.data;
+const href = d.href ?? `/work/${entry.id}/`;
+---
+<a class="work-card" href={href}>
+  <figure class:list={{ contain: d.coverFit === 'contain' }}>
+    <Image src={d.cover} alt="" widths={[400, 640, 960]} sizes="(max-width: 700px) 100vw, (max-width: 900px) 50vw, 400px" loading={eager ? 'eager' : 'lazy'} />
+  </figure>
+  <div class="tags">{d.media.map((m) => <span class="tag">{m}</span>)}</div>
+  <h3>{d.title}</h3>
+  <p>{d.summary}</p>
+</a>

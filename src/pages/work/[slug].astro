@@ -1,0 +1,29 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection, render } from 'astro:content';
+import Article from '../../layouts/Article.astro';
+
+export async function getStaticPaths() {
+  // Entries with their own href (e.g. a blog post) don't get a case-study page.
+  const work = await getCollection('work', (e) => !e.data.draft && !e.data.href);
+  return work.map((item) => ({ params: { slug: item.id }, props: { item } }));
+}
+const { item } = Astro.props;
+const { Content, headings } = await render(item);
+const d = item.data;
+---
+<Article title={d.title} description={d.summary} eyebrow={`Work · ${d.year}`} lede={d.summary} meta={[d.media.join(' · '), d.tools.length ? `Tools: ${d.tools.join(', ')}` : ''].filter(Boolean)} headings={headings} image={d.cover}>
+  <figure slot="before" class:list={['cover', { contain: d.coverFit === 'contain' }]}>
+    <Image src={d.cover} alt="" widths={[640, 1000, 1400]} sizes="(max-width: 1240px) 100vw, 1160px" loading="eager" />
+  </figure>
+  {d.links.length > 0 && <p class="links">{d.links.map((l) => <a class="btn" href={l.href}>{l.label}</a>)}</p>}
+  <Content />
+  <p slot="after" class="back"><a class="link" href="/work/">All work</a></p>
+</Article>
+<style>
+  .cover { margin: 0 0 48px; max-height: 620px; overflow: hidden; background: #f4f4f0; border-radius: 2px; }
+  .cover :global(img) { width: 100%; height: 100%; max-height: 620px; object-fit: cover; }
+  .cover.contain :global(img) { object-fit: contain; padding: 24px; }
+  .links { display: flex; flex-wrap: wrap; gap: 12px; }
+  .back { margin-top: 56px; }
+</style>

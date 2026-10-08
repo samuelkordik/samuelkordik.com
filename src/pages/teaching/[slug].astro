@@ -1,0 +1,25 @@
+---
+import { getCollection, render } from 'astro:content';
+import Article from '../../layouts/Article.astro';
+
+export async function getStaticPaths() {
+  const courses = await getCollection('courses', (e) => !e.data.draft);
+  return courses.map((course) => ({ params: { slug: course.id }, props: { course } }));
+}
+const { course } = Astro.props;
+const { Content } = await render(course);
+const d = course.data;
+---
+<Article title={d.title} description={d.summary} eyebrow="Course" lede={d.summary} meta={[d.audience ?? '', `Updated ${d.updatedDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' })}`].filter(Boolean)}>
+  {d.files.length > 0 && (
+    <ul class="files">
+      {d.files.map((f) => <li><a href={`/teaching/${course.id}/${f.file}`} download>{f.label}</a>{f.size && <small>{f.size}</small>}</li>)}
+    </ul>
+  )}
+  <Content />
+</Article>
+<style>
+  .files { list-style: none; padding: 0 !important; border-top: 1px solid var(--rule); }
+  .files li { display: flex; justify-content: space-between; gap: 16px; padding-block: 12px; border-bottom: 1px solid var(--rule); margin: 0 !important; }
+  .files small { color: var(--muted); }
+</style>

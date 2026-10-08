@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Samuel Kordik — C: Data-forward</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:ital,wght@1,400&display=swap">
+<style>
+/* Layout: an engineer's notebook on graph paper. The hero is a to-scale chart of the career; work is a sortable-looking table. */
+:root{
+  --paper:#f6f7f4; --grid:#e6e9e3; --ink:#121417; --muted:#61666d; --rule:#cfd3cc;
+  --red:#cf3440;  /* from Samuel's box-plot palette */
+  --blue:#2463a8;
+  --mono:"IBM Plex Mono", ui-monospace, monospace; --sans:"IBM Plex Sans", system-ui, sans-serif; --serif:"IBM Plex Serif", Georgia, serif;
+}
+*{box-sizing:border-box}
+body{margin:0;color:var(--ink);font:400 16px/1.6 var(--sans);
+  background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:24px 24px}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1200px;margin:0 auto;padding-inline:40px}
+.m{font-family:var(--mono)}
+header{display:flex;justify-content:space-between;align-items:center;padding-block:24px;font:400 14px/1 var(--mono)}
+header .path b{font-weight:600}
+header nav{display:flex;gap:24px;color:var(--muted)}
+header nav a::before{content:"./";color:var(--rule)}
+
+.hero{padding-block:72px 24px}
+.hero .k{font:500 13px/1 var(--mono);color:var(--red);letter-spacing:.04em}
+.hero h1{font:600 56px/1.06 var(--sans);letter-spacing:-.03em;margin:16px 0 18px;max-width:20ch;text-wrap:balance}
+.hero h1 i{font:italic 400 1em/1 var(--serif);letter-spacing:-.01em}
+.hero p{max-width:60ch;color:var(--muted);font-size:18px;margin:0}
+
+.figure{background:var(--paper);border:1px solid var(--rule);margin:40px 0 80px;padding:24px 28px 18px}
+.figure .cap{display:flex;justify-content:space-between;gap:16px;font:400 12.5px/1.4 var(--mono);color:var(--muted);margin-bottom:12px}
+.figure .cap b{color:var(--ink);font-weight:600}
+.svgwrap{overflow-x:auto}
+svg{display:block;min-width:720px;width:100%;height:auto}
+svg text{font-family:var(--mono);font-size:12px;fill:var(--ink)}
+svg .lab{fill:var(--muted)}
+svg .ann{font-size:11.5px}
+
+.sec{display:grid;grid-template-columns:220px minmax(0,1fr);gap:40px;margin-bottom:80px}
+.sec h2{font:600 13px/1.4 var(--mono);margin:6px 0 0;text-transform:uppercase;letter-spacing:.06em}
+.sec h2 span{display:block;color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0;margin-top:6px}
+.tbl{overflow-x:auto;background:var(--paper);border:1px solid var(--rule)}
+table{width:100%;border-collapse:collapse;font-size:15px;min-width:680px}
+th{font:500 11.5px/1 var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--muted);text-align:left;padding:14px 16px;border-bottom:1px solid var(--ink)}
+td{padding:16px;border-bottom:1px solid var(--rule);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td.n{font-weight:600}
+td.n small{display:block;font-weight:400;color:var(--muted);font-size:14px;margin-top:2px}
+td.t,td.y{font:400 13px/1.5 var(--mono);color:var(--muted);white-space:nowrap}
+.chip{display:inline-block;font:500 11.5px/1 var(--mono);padding:5px 7px;border:1px solid currentColor;margin:0 4px 4px 0}
+.chip.d{color:var(--blue)} .chip.v{color:var(--red)} .chip.p{color:var(--ink)}
+.spark{display:block;width:96px;height:28px}
+
+.log{list-style:none;margin:0;padding:0;background:var(--paper);border:1px solid var(--rule)}
+.log li{display:grid;grid-template-columns:120px minmax(0,1fr) 90px;gap:20px;padding:13px 16px;border-bottom:1px solid var(--rule);align-items:baseline}
+.log li:last-child{border-bottom:0}
+.log time,.log .tg{font:400 13px/1.4 var(--mono);color:var(--muted)}
+.log .tg{text-align:right}
+.log a{font-weight:500}
+
+footer{border-top:1px solid var(--ink);padding-block:28px 56px;display:flex;justify-content:space-between;gap:20px;font:400 13.5px/1.4 var(--mono)}
+footer .links{display:flex;gap:20px}
+
+@media (max-width:700px){
+  .wrap{padding-inline:16px}
+  header nav{display:none}
+  .hero{padding-block:40px 8px}
+  .hero h1{font-size:36px}
+  .hero p{font-size:16px}
+  .figure{padding:16px;margin:28px 0 48px}
+  .sec{grid-template-columns:1fr;gap:12px;margin-bottom:48px}
+  .log li{grid-template-columns:1fr;gap:2px}
+  .log .tg{text-align:left}
+  footer{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header><span class="path">~/<b>samuel_kordik</b></span><nav><a>work</a><a>writing</a><a>teaching</a><a>about</a><a>resume.pdf</a></nav></header>
+
+<div class="hero">
+  <div class="k">EMS × DATA × EDUCATION × MEDIA</div>
+  <h1>Finding the signal in emergency care, <i>then teaching others to see it.</i></h1>
+  <p>Paramedic turned quality leader. I write R, design dashboards and reports, shoot photo and video, and run EMS education programs. Currently: Quality Management Division, Dallas Fire-Rescue OMD.</p>
+</div>
+
+<div class="figure">
+  <div class="cap"><span><b>Fig. 1</b> Career by discipline, 2005–2026. Bars show active years; dots mark turning points.</span><span>source: resume.yaml</span></div>
+  <div class="svgwrap">
+  <svg viewBox="0 0 1160 270" role="img" aria-label="Timeline of career disciplines from 2005 to 2026">
+    <!-- x(y) = 160 + (y-2005)*45 -->
+    <g stroke="#cfd3cc" stroke-width="1">
+      <line x1="160" y1="20" x2="160" y2="232"/><line x1="385" y1="20" x2="385" y2="232"/><line x1="610" y1="20" x2="610" y2="232"/><line x1="835" y1="20" x2="835" y2="232"/><line x1="1060" y1="20" x2="1060" y2="232"/>
+    </g>
+    <line x1="160" y1="232" x2="1105" y2="232" stroke="#121417" stroke-width="1"/>
+    <g class="lab" text-anchor="middle"><text x="160" y="254">2005</text><text x="385" y="254">2010</text><text x="610" y="254">2015</text><text x="835" y="254">2020</text><text x="1060" y="254">2025</text></g>
+    <g class="lab"><text x="0" y="44">Field EMS</text><text x="0" y="84">Teaching</text><text x="0" y="124">Data &amp; quality</text><text x="0" y="164">Leadership</text><text x="0" y="204">Photo / video</text></g>
+    <rect x="160" y="34" width="810" height="14" fill="#cf3440"/>
+    <rect x="340" y="74" width="585" height="14" fill="#121417"/>
+    <rect x="565" y="114" width="540" height="14" fill="#2463a8"/>
+    <rect x="655" y="154" width="450" height="14" fill="#2463a8" fill-opacity=".55"/>
+    <rect x="655" y="194" width="450" height="14" fill="#cf3440" fill-opacity=".45"/>
+    <g fill="#f6f7f4" stroke="#121417" stroke-width="2">
+      <circle cx="160" cy="41" r="6"/><circle cx="565" cy="121" r="6"/><circle cx="790" cy="161" r="6"/><circle cx="970" cy="161" r="6"/>
+    </g>
+    <g class="ann">
+      <text x="172" y="24">Katrina shelter → EMT class</text>
+      <text x="577" y="106">First full-time data role</text>
+      <text x="802" y="146">Clinical Director</text>
+      <text x="982" y="146">DFR Quality Mgr</text>
+    </g>
+  </svg>
+  </div>
+</div>
+
+<div class="sec">
+  <h2>Work<span>filter by medium</span></h2>
+  <div class="tbl"><table>
+    <thead><tr><th>Project</th><th>Medium</th><th>Tools</th><th>Year</th></tr></thead>
+    <tbody>
+      <tr><td class="n">Chart Completion Performance<small>% of charts open &gt;24 h, &gt;4 d, &gt;8 d on rolling 30-day windows</small></td><td><span class="chip d">data</span></td><td class="t">R · Tableau · SQL</td><td class="y">2023</td></tr>
+      <tr><td class="n">2023 DFR EMS Annual Report<small>Led, photographed, analyzed, and designed</small></td><td><span class="chip d">data</span><span class="chip v">photo</span><span class="chip p">design</span></td><td class="t">R · layout · camera</td><td class="y">2024</td></tr>
+      <tr><td class="n">Setting Faculty Pay<small>Blended-overtime teaching rates from historic payroll</small></td><td><span class="chip d">data</span></td><td class="t">R</td><td class="y">2023</td></tr>
+      <tr><td class="n">Ketamine for psychiatric emergencies<small>Adverse events, n = 3,020 · PCRF poster</small></td><td><span class="chip d">research</span></td><td class="t">R · ESO data</td><td class="y">2019</td></tr>
+      <tr><td class="n">Training film &amp; podcast production<small>Course video, recruitment, EMS education podcast</small></td><td><span class="chip v">video</span><span class="chip v">audio</span></td><td class="t">camera · edit · mix</td><td class="y">2016–</td></tr>
+      <tr><td class="n">better_hist<small>Opinionated ggplot2 histogram (Freedman–Diaconis bins)</small></td><td><span class="chip d">code</span></td><td class="t">R · ggplot2</td><td class="y">2025</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<div class="sec">
+  <h2>Writing<span>essays &amp; notes</span></h2>
+  <ul class="log">
+    <li><time>2025-10-18</time><a href="#">Storyteller, Impresario, or Guide: varying approaches to dashboard development</a><span class="tg">#dashboards</span></li>
+    <li><time>2025-08-12</time><a href="#">better_hist: extending ggplot2 with an opinionated histogram</a><span class="tg">#r</span></li>
+    <li><time>2025-07-18</time><a href="#">Pro-level YouTube downloading</a><span class="tg">#tools</span></li>
+    <li><time>2024-10-02</time><a href="#">Hot take: EMT-B is not a career endpoint</a><span class="tg">#ems</span></li>
+  </ul>
+</div>
+
+<div class="sec">
+  <h2>Teaching<span>/teaching · /files</span></h2>
+  <ul class="log">
+    <li><time>guide</time><a href="#">First aid kit recommendations</a><span class="tg">html</span></li>
+    <li><time>guide</time><a href="#">Survival kit recommendations</a><span class="tg">html</span></li>
+    <li><time>course</time><a href="#">Example course: slides &amp; handouts</a><span class="tg">pdf · 4.2M</span></li>
+  </ul>
+</div>
+
+<footer><span>mail@samuelkordik.com</span><div class="links"><span>github</span><span>linkedin</span><span>orcid</span><span>goodreads</span></div></footer>
+</div>
+</body>
+</html>

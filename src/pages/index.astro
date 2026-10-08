@@ -1,0 +1,194 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import WorkCard from '../components/WorkCard.astro';
+import { site, yearsInEms } from '../data/site';
+import hero from '../assets/photos/hero-blood-transfusion.jpg';
+import portraitUniform from '../assets/photos/portrait-uniform.jpg';
+import chart from '../assets/photos/chart-ridgeline.png';
+import training from '../assets/photos/training-scenario.jpg';
+import vehicle from '../assets/photos/supervisor-vehicle.jpg';
+import trail from '../assets/photos/trail.jpg';
+import lake from '../assets/photos/alpine-lake.jpg';
+
+const work = (await getCollection('work', (e) => e.data.featured && !e.data.draft)).sort((a, b) => a.data.order - b.data.order).slice(0, 6);
+const posts = (await getCollection('writing', (e) => !e.data.draft)).sort((a, b) => +b.data.pubDate - +a.data.pubDate).slice(0, 4);
+const guides = await getCollection('guides', (e) => !e.data.draft);
+const fmt = (d: Date) => d.toLocaleDateString('en-US', { month: 'short', year: 'numeric', timeZone: 'UTC' });
+const years = yearsInEms();
+const words = ['Zero', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen', 'Twenty'];
+const yearsWord = years <= 20 ? words[years] : years < 30 ? `Twenty-${words[years - 20].toLowerCase()}` : String(years);
+
+const pillars = [
+  { img: portraitUniform, pos: '50% 20%', eyebrow: 'Lead', title: 'EMS quality management and leadership', text: 'Building cultures of EMS excellence and uncovering the hidden drivers of system quality in EMS.', href: '/about/' },
+  { img: chart, pos: '50% 0%', eyebrow: 'Analyze', title: 'Data that changes decisions', text: 'Dashboards, R, and visual storytelling that turn backlogs and payroll tables into action.', href: '/work/' },
+  { img: training, pos: '50% 50%', eyebrow: 'Teach', title: 'Education that sticks', text: 'Paramedic program director, Texas DSHS Advanced Course Coordinator, and instructor for ACLS, PHTLS, AMLS and more.', href: '/teaching/' },
+];
+const learning = [
+  { name: 'DaVinci Resolve', note: 'Editing & color' },
+  { name: 'Onshape', note: 'Parametric CAD' },
+  { name: 'Blender', note: '3D modeling' },
+  { name: '3D printing', note: 'Zero to expert' },
+  { name: 'Differential geometry', note: 'For fun' },
+];
+---
+<Base overlayHeader>
+  <section class="hero">
+    <Image src={hero} alt="Paramedics starting a blood transfusion in the back of an ambulance" widths={[800, 1400, 2000, 2560]} sizes="100vw" loading="eager" fetchpriority="high" class="hero-img" />
+    <div class="wrap hero-body">
+      <p class="eyebrow">Paramedic · Quality leader · Analyst · Photographer · Teacher</p>
+      <h1>I build things, solve problems, and <span>never stop learning.</span></h1>
+      <p class="sub">{site.mission}</p>
+    </div>
+  </section>
+
+  <section class="wrap pillars">
+    <div class="intro">
+      <h2>{yearsWord} years in EMS, and still learning.</h2>
+      <p>I lead the Quality Management Division at the Dallas Fire-Rescue Office of the Medical Director. I came up as a paramedic, I’ve been teaching since 2001, and I’ve been paid to hold a camera since 2003.</p>
+    </div>
+    <div class="pgrid">
+      {pillars.map((p) => (
+        <a class="pillar" href={p.href}>
+          <figure><Image src={p.img} alt="" widths={[400, 700]} sizes="(max-width: 700px) 100vw, 33vw" style={`object-position:${p.pos}`} /></figure>
+          <p class="eyebrow">{p.eyebrow}</p>
+          <h3>{p.title}</h3>
+          <p class="muted">{p.text}</p>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="media">
+    <div class="wrap">
+      <figure><Image src={vehicle} alt="Supervisor vehicle under a dramatic sky" widths={[600, 1000]} sizes="(max-width: 700px) 100vw, 60vw" /></figure>
+      <div>
+        <p class="eyebrow">Photo · Video · Audio</p>
+        <h2>Behind the camera since 2003.</h2>
+        <p class="body">I worked full-time in documentary, photojournalism and marketing before EMS took over, and I still produce training videos and podcasts. Every photo on this site is mine, apart from the ones of me.</p>
+        <p class="pod"><strong>Cypress Creek EMS Podcast</strong><span>On almost every episode</span></p>
+        <a class="link" href="/work/">See the work</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap work">
+    <div class="section-head"><h2>Selected work</h2><a class="link" href="/work/">All work</a></div>
+    <div class="work-grid">{work.map((w) => <WorkCard entry={w} />)}</div>
+  </section>
+
+  <section class="learn" aria-labelledby="learn-h">
+    <div class="wrap">
+      <h2 id="learn-h">Currently learning</h2>
+      <ul>{learning.map((l) => <li><strong>{l.name}</strong><span>{l.note}</span></li>)}</ul>
+    </div>
+  </section>
+
+  <section class="wrap split">
+    <div>
+      <div class="section-head"><h2>Writing</h2><a class="link" href="/writing/">Archive</a></div>
+      <ul class="post-list">
+        {posts.map((p) => <li><time datetime={p.data.pubDate.toISOString()}>{fmt(p.data.pubDate)}</time><a href={`/writing/${p.id}/`}>{p.data.title}</a></li>)}
+      </ul>
+    </div>
+    <aside class="teach">
+      <p class="eyebrow">Teaching &amp; guides</p>
+      <h3>Free to use</h3>
+      <p class="muted">Guides and course materials I’ve made for students and colleagues.</p>
+      <ul>
+        {guides.map((g) => <li><a href={`/guides/${g.id}/`}>{g.data.title}</a><small>Guide</small></li>)}
+        <li><a href="/teaching/">Course materials</a><small>Teaching</small></li>
+      </ul>
+    </aside>
+  </section>
+
+  <section class="offshift">
+    <Image src={trail} alt="A mountain trail above treeline" widths={[600, 960]} sizes="(max-width: 700px) 100vw, 33vw" />
+    <div class="note">
+      <p class="eyebrow">Off duty</p>
+      <h2>Adventures with God, family, making things, and feeding my endless curiosity.</h2>
+      <p>Foster/adoptive dad of three boys, two dogs, and one turtle. When I get the time, I love exploring the outdoors, tinkering with electronics, reading, cooking, and 3D printing.</p>
+      <a class="link" href="/about/">More about me</a>
+    </div>
+    <Image src={lake} alt="An alpine lake reflecting clouds" widths={[600, 960]} sizes="(max-width: 700px) 100vw, 33vw" />
+  </section>
+</Base>
+
+<style>
+  .hero { position: relative; min-height: min(92vh, 760px); display: flex; align-items: flex-end; color: #fff; overflow: hidden; background: var(--night); }
+  .hero :global(.hero-img) { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 60% 40%; }
+  .hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, rgb(12 19 14 / 0.92) 0%, rgb(12 19 14 / 0.55) 48%, rgb(12 19 14 / 0.05) 80%), linear-gradient(0deg, rgb(12 19 14 / 0.75), transparent 45%); }
+  .hero-body { position: relative; z-index: 1; width: 100%; padding-block: 150px 72px; }
+  .hero .eyebrow { color: var(--on-night); }
+  .hero h1 { font-size: var(--h1); line-height: 0.98; max-width: 15ch; margin: 18px 0 24px; }
+  .hero h1 span { color: var(--accent); }
+  .hero .sub { max-width: 50ch; font-size: 1.1875rem; color: rgb(255 255 255 / 0.88); }
+
+  .pillars { padding-block: 96px 0; }
+  .intro { display: grid; grid-template-columns: 1fr 1.25fr; gap: 64px; align-items: end; margin-bottom: 52px; }
+  .intro h2 { font-size: var(--h2); }
+  .intro p { color: var(--muted); max-width: 56ch; }
+  .pgrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; }
+  .pillar figure { margin: 0 0 18px; aspect-ratio: 4 / 5; overflow: hidden; background: #f4f4f0; }
+  .pillar figure :global(img) { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; }
+  .pillar:hover figure :global(img) { transform: scale(1.025); }
+  .pillar h3 { font-size: var(--h3); margin: 10px 0 8px; }
+  .pillar:hover h3 { color: var(--accent-text); }
+
+  .media { background: var(--night); margin-top: 96px; }
+  .media .wrap { display: grid; grid-template-columns: 1.5fr 1fr; gap: 56px; align-items: center; padding-block: 96px; }
+  .media figure { margin: 0; aspect-ratio: 16 / 10; overflow: hidden; }
+  .media figure :global(img) { width: 100%; height: 100%; object-fit: cover; }
+  .media .eyebrow { color: var(--on-night); }
+  .media h2 { font-size: var(--h2); margin: 16px 0; }
+  .media .body { color: var(--muted); margin-bottom: 22px; }
+  .pod { display: flex; flex-direction: column; border-left: 3px solid var(--accent); padding: 4px 0 4px 16px; margin-bottom: 26px; }
+  .pod span { color: var(--muted); font-size: 0.875rem; }
+
+  .work { padding-block: 96px 72px; }
+
+  .learn { border-block: 1px solid var(--rule); padding-block: 28px; margin-bottom: 88px; }
+  .learn .wrap { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 24px; align-items: start; }
+  .learn h2 { font-size: calc(var(--h3) * 0.95); }
+  .learn ul { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 24px; list-style: none; margin: 0; padding: 0; }
+  .learn li::before { content: ''; display: block; width: 22px; height: 4px; background: var(--accent); margin-bottom: 12px; }
+  .learn strong { display: block; font-weight: 600; }
+  .learn span { color: var(--muted); font-size: 0.875rem; }
+
+  .split { display: grid; grid-template-columns: 1.25fr 1fr; gap: 72px; padding-bottom: 104px; }
+  .teach { background: var(--surface); padding: 34px; border-radius: 2px; align-self: start; }
+  .teach h3 { font-size: var(--h3); margin: 12px 0 6px; }
+  .teach > p.muted { margin-bottom: 18px; font-size: 0.96875rem; }
+  .teach ul { list-style: none; margin: 0; padding: 0; }
+  .teach li { display: flex; justify-content: space-between; gap: 16px; padding-block: 12px; border-top: 1px solid var(--rule); font-size: 0.96875rem; }
+  .teach li a:hover { color: var(--accent-text); }
+  .teach small { color: var(--muted); white-space: nowrap; }
+
+  .offshift { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+  .offshift > :global(img) { width: 100%; height: 440px; object-fit: cover; }
+  .note { background: var(--green); padding: 44px; display: flex; flex-direction: column; justify-content: flex-end; gap: 12px; }
+  .note .eyebrow { color: #fff; opacity: 0.8; }
+  .note h2 { font-size: calc(var(--h2) * 0.8); }
+  .note p { color: rgb(255 255 255 / 0.85); }
+  .note .link { align-self: flex-start; margin-top: 8px; }
+
+  @media (max-width: 900px) {
+    .learn ul { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+  @media (max-width: 700px) {
+    .hero { min-height: 640px; }
+    .hero::after { background: linear-gradient(0deg, rgb(12 19 14 / 0.94) 15%, rgb(12 19 14 / 0.4) 62%, rgb(12 19 14 / 0.3)); }
+    .hero-body { padding-block: 120px 56px; }
+    .hero .sub { font-size: 1.0625rem; }
+    .pillars { padding-block: 64px 0; }
+    .intro, .pgrid, .media .wrap, .split, .learn .wrap { grid-template-columns: minmax(0, 1fr); gap: 26px; }
+    .pillar figure { aspect-ratio: 3 / 2; }
+    .media { margin-top: 64px; }
+    .media .wrap { padding-block: 64px; }
+    .learn ul { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .offshift { grid-template-columns: minmax(0, 1fr); }
+    .offshift > :global(img) { height: 240px; }
+    .note { padding: 32px var(--gutter); }
+  }
+</style>

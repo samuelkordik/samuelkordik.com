@@ -1,0 +1,39 @@
+---
+import Base from '../layouts/Base.astro';
+import Email from '../components/Email.astro';
+import { site } from '../data/site';
+const areas = [
+  { title: 'EMS quality management', text: 'Building or rebuilding a QM program: case review, performance measures, dashboards, and the culture that makes them stick.' },
+  { title: 'Data & analytics', text: 'Answering hard operational and clinical questions with data, from pipelines and R analysis to dashboards people actually use.' },
+  { title: 'EMS education', text: 'Program development, accreditation, course coordination, and instructor development for initial and continuing education.' },
+  { title: 'Photo, video & audio', text: 'Training films, recruitment pieces, podcasts, and photography for EMS and public safety organizations.' },
+];
+---
+<Base title="Work with me" description="Consulting and contract work in EMS quality, data analytics, EMS education, and media production." footerCta={false}>
+  <div class="wrap">
+    <header class="page-head" id="contact">
+      <p class="eyebrow">Work with me</p>
+      <h1>Have a hard question? Let’s solve it.</h1>
+      <p class="lede">I’m open to consulting and contract work. If your organization has a problem in one of these areas, I’d like to hear about it.</p>
+    </header>
+    <ul class="areas">{areas.map((a) => <li><h2>{a.title}</h2><p>{a.text}</p></li>)}</ul>
+    <section class="reach">
+      <h2>Get in touch</h2>
+      <p class="email"><Email /></p>
+      <ul>{site.social.map((s) => <li><a class="link" href={s.href} rel="me">{s.label}</a></li>)}</ul>
+    </section>
+  </div>
+</Base>
+<style>
+  .areas { list-style: none; margin: 0 0 72px; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+  .areas li { background: var(--surface); border: 1px solid var(--rule); border-radius: 8px; padding: 26px 28px; }
+  .areas li::before { content: ''; display: block; width: 22px; height: 4px; background: var(--accent); margin-bottom: 16px; }
+  .areas h2 { font-size: 1.5rem; margin-bottom: 8px; }
+  .areas p { color: var(--muted); }
+  .reach { border-top: 1px solid var(--rule); padding-top: 32px; }
+  .reach h2 { font-size: var(--h3); }
+  .email { font: 600 clamp(1.5rem, 1rem + 2vw, 2.5rem)/1.2 var(--display); margin: 14px 0 22px; }
+  .email :global(a) { color: var(--accent); }
+  .reach ul { display: flex; flex-wrap: wrap; gap: 24px; list-style: none; margin: 0; padding: 0; }
+  @media (max-width: 700px) { .areas { grid-template-columns: minmax(0, 1fr); } }
+</style>

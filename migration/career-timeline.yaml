@@ -1,0 +1,49 @@
+# Career timeline for the About/Resume chart. Confirmed by Samuel 2026-10-08.
+# Becomes src/data/resume.yaml (timeline section) in Phase 2.
+# kind: solid = primary focus, light = alongside other work. end: null = present.
+lanes:
+  - id: media
+    label: Photo & video
+    creative: true
+    spans:
+      - { start: 2003, end: null, kind: light }
+      - { start: 2007, end: 2008, kind: solid }   # full-time documentary/photojournalism/marketing
+      - { start: 2016, end: 2019, kind: solid }   # producing training videos & podcasts
+      - { start: 2023, end: null, kind: solid }   # still producing
+    milestones:
+      - { year: 2003, label: Contract video }
+      - { year: 2007, label: Full-time photo/video, marker: false }
+      - { year: 2016, label: Producing training videos & podcasts, marker: false }
+  - id: field
+    label: Field EMS
+    spans:
+      - { start: 2005, end: 2014, kind: solid }
+      - { start: 2014, end: 2023, kind: light }
+      - { start: 2023, end: 2023.5, kind: solid } # Mar–Jun 2023 paramedic
+    milestones:
+      - { year: 2005, label: Katrina shelter → EMT class }
+      - { year: 2023, label: Back on the truck, marker: false }
+  - id: leadership
+    label: Leadership
+    spans:
+      - { start: 2006, end: 2010, kind: solid }
+      - { start: 2014, end: null, kind: solid }
+    milestones:
+      - { year: 2006, label: Quest Program Director }
+      - { year: 2019, label: Clinical Director }
+      - { year: 2023, label: DFR QM }
+  - id: teaching
+    label: Teaching
+    spans:
+      - { start: 2001, end: null, kind: solid }
+    milestones:
+      - { year: 2001, label: Started teaching }
+      - { year: 2010, label: CE classes }
+      - { year: 2014, label: EMT & paramedic }
+      - { year: 2017, label: Paramedic Program Director / ACC }
+  - id: data
+    label: Data & quality
+    spans:
+      - { start: 2014, end: null, kind: solid }
+    milestones:
+      - { year: 2014, label: EMS data analysis }

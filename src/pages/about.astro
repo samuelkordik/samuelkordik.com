@@ -1,0 +1,88 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import CareerChart from '../components/CareerChart.astro';
+import { site, yearsInEms } from '../data/site';
+import portrait from '../assets/photos/portrait-uniform.jpg';
+import trail from '../assets/photos/trail.jpg';
+import lake from '../assets/photos/alpine-lake.jpg';
+
+const goodreads = site.social.find((s) => s.label === 'Goodreads')!.href;
+const values = [
+  { name: 'Live with excellence (αρετή)', text: 'The Greek word αρετή (arete) means goodness, excellence, valour, and virtue. Living with αρετή means living up to my full potential and achieving great results. It also means living a morally upright life, one characterized by integrity, discipline, and courage.' },
+  { name: 'Do justice', text: 'I actively seek to treat people fairly and to do the right thing. As a leader, colleague, and human being, I respect the fundamental dignity of others and seek to treat people decently and without bias.' },
+  { name: 'Love mercy', text: 'Justice must be balanced by compassion. I seek to be kind and forgiving, giving people the benefit of the doubt and striving to show empathy and grace.' },
+  { name: 'Walk humbly coram Deo', text: 'Walking connotes steady forward progress. I haven’t arrived, I can’t settle, and I must keep growing, pushing down my ego and embracing humility. Coram Deo is Latin for “before the face of God,” a reminder to live knowing my words and actions will be judged by a higher power.' },
+];
+---
+<Base title="About" description="Paramedic, EMS quality leader, data analyst, photographer and teacher, and a lifelong builder and learner.">
+  <div class="wrap">
+    <header class="about-head">
+      <div>
+        <p class="eyebrow">About</p>
+        <h1>I’m Samuel. I build things, solve problems, and never stop learning.</h1>
+        <p class="lede">{site.mission}</p>
+      </div>
+      <figure><Image src={portrait} alt="Samuel Kordik in a Dallas Fire-Rescue OMD uniform" widths={[400, 700]} sizes="(max-width: 700px) 100vw, 380px" loading="eager" /></figure>
+    </header>
+
+    <section class="story">
+      <h2>My story</h2>
+      <div class="prose">
+        <p>In 2005 I spent two weeks volunteering with EMS professionals at the Hurricane Katrina evacuee shelter in Houston. Afterward I enrolled in an EMT-Basic class and discovered the best profession I could imagine. I worked as a paramedic in East Texas, then as a 911 paramedic in the busy urban and suburban Houston area.</p>
+        <p>I was already a teacher by then. I started teaching in 2001, and it has never stopped: skills labs and continuing education, then EMT and paramedic classes, then running accredited programs as a paramedic program director and advanced course coordinator.</p>
+        <p>I was also a photographer. I did my first paid video work around 2003 and spent 2007 and 2008 shooting full-time: documentary and photojournalism, marketing, some portraits, and a wedding. That eye for a story has followed me into every job since, from training films and podcasts to annual reports.</p>
+        <p>On the side I chased technology, software, and data. I launched a SaaS startup that failed and took statistics courses. In 2014 I got to combine those interests in a full-time role focused on data analytics, research, and quality management, while still working as a paramedic and field supervisor.</p>
+        <p>I promoted through several leadership roles, ending in a senior position overseeing quality of care, compliance, data analytics, field training, clinical practice guidelines, and disaster response. Since 2023 I’ve led the Quality Management Division of the Dallas Fire-Rescue Office of the Medical Director and served as the EMS Quality Manager in the Parkland Health/BioTel EMS system. That’s {yearsInEms()} years in EMS, and I’m still learning.</p>
+      </div>
+    </section>
+
+    <section class="chart"><CareerChart /></section>
+
+    <section class="values">
+      <h2>What drives me</h2>
+      <div class="vgrid">{values.map((v) => <div><h3>{v.name}</h3><p>{v.text}</p></div>)}</div>
+    </section>
+  </div>
+
+  <section class="life">
+    <Image src={trail} alt="A mountain trail above treeline" widths={[600, 960]} sizes="(max-width: 700px) 100vw, 33vw" />
+    <div class="note">
+      <p class="eyebrow">Off duty</p>
+      <h2>Life as an adventure</h2>
+      <p>I’m married to a wonderful woman. Together we’ve fostered five children and adopted three of them, our three boys. We share the house with two dogs, Jack (a border collie/great pyrenees) and Ollie (a dachshund), and Raphael, a turtle my son rescued from our backyard.</p>
+      <p>I have a strong ADHD streak and a matching number of hobbies. Building and tinkering sit at the center: 3D printing has become the biggest one, alongside electronics, cooking, and backpacking. I’m a voracious reader (see my <a href={goodreads}>Goodreads</a>), and this year I learned DaVinci Resolve, Onshape, and Blender, and started studying differential geometry for fun.</p>
+    </div>
+    <Image src={lake} alt="An alpine lake reflecting clouds" widths={[600, 960]} sizes="(max-width: 700px) 100vw, 33vw" />
+  </section>
+</Base>
+
+<style>
+  .about-head { display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 64px; align-items: end; padding-block: 72px 64px; }
+  .about-head h1 { font-size: calc(var(--h1) * 0.78); margin-top: 14px; max-width: 18ch; }
+  .lede { font-size: 1.1875rem; color: var(--muted); margin-top: 20px; max-width: 56ch; }
+  .about-head figure { margin: 0; aspect-ratio: 4 / 5; overflow: hidden; }
+  .about-head figure :global(img) { width: 100%; height: 100%; object-fit: cover; object-position: 50% 20%; }
+  .story { display: grid; grid-template-columns: 220px minmax(0, var(--measure)); gap: 48px; padding-block: 24px 64px; border-top: 1px solid var(--rule); }
+  .story h2, .values h2 { font-size: var(--h3); padding-top: 28px; }
+  .story .prose { padding-top: 28px; }
+  .chart { padding-bottom: 80px; }
+  .values { border-top: 1px solid var(--rule); padding-bottom: 88px; }
+  .vgrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 36px 48px; margin-top: 32px; }
+  .vgrid h3 { font-size: 1.375rem; color: var(--accent-text); margin-bottom: 8px; }
+  .vgrid p { color: var(--muted); }
+  .life { display: grid; grid-template-columns: 1fr 1.3fr 1fr; gap: 6px; }
+  .life > :global(img) { width: 100%; height: 100%; min-height: 440px; object-fit: cover; }
+  .note { background: var(--green); padding: 44px; display: flex; flex-direction: column; justify-content: center; gap: 14px; }
+  .note .eyebrow { color: #fff; opacity: 0.8; }
+  .note h2 { font-size: calc(var(--h2) * 0.8); }
+  .note p { color: rgb(255 255 255 / 0.88); }
+  .note a { color: #fff; text-decoration: underline; text-underline-offset: 3px; }
+  @media (max-width: 900px) {
+    .about-head, .story { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+    .about-head figure { max-width: 380px; }
+    .vgrid, .life { grid-template-columns: minmax(0, 1fr); }
+    .life > :global(img) { min-height: 0; height: 240px; }
+    .note { padding: 32px var(--gutter); }
+  }
+</style>

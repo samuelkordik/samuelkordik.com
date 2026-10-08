@@ -1,0 +1,111 @@
+# Single source for /resume/ and the career chart on /about/ and /resume/.
+# Timeline confirmed by Samuel 2026-10-08. kind: solid = primary focus, light = alongside other work. end: null = present.
+
+downloads:
+  - { label: EMS resume, file: /files/samuel-kordik-resume-ems.pdf }
+  - { label: Data analyst resume, file: /files/samuel-kordik-resume-data.pdf }
+
+experience:
+  - title: EMS Quality Manager
+    org: Dallas Fire-Rescue Office of the Medical Director · Parkland/BioTel
+    start: Jun 2023
+    end: Present
+    summary: Leading the Quality Management Division within the Dallas Fire-Rescue Office of the Medical Director and the Parkland/BioTel system.
+  - title: Paramedic
+    start: Mar 2023
+    end: Jun 2023
+    summary: Worked as a paramedic on a busy urban/suburban ambulance in a progressive EMS system, a welcome chance to get back to my roots and rekindle my passion for excellent patient care.
+  - title: Director, Compliance, Quality, and Education
+    start: Mar 2021
+    end: Dec 2022
+    summary: System-level focus on operational efficiency, quality, and compliance with accreditation standards and regulatory requirements. Led an organizational policy overhaul, built data pipelines and dashboards that streamlined billing and reduced documentation errors, and led our accredited education program.
+  - title: Clinical Director
+    start: Jun 2019
+    end: Mar 2021
+    summary: Executive-level leadership for education and quality of patient care in a large 911 EMS system with critical care transfer and fixed-wing flight programs. Built a quality management program and team from the ground up, grew the education team, used analytics to improve education outcomes, and designed dashboards and data visualization for quality of care.
+  - title: Senior Clinical Supervisor
+    start: "2016"
+    end: "2019"
+    summary: Responsible for the quality management program, employee continuing education, and accredited education programs. Applied data analytics to hiring, to deployment of life-saving treatments, and to organizational decisions. Introduced in-house audio/video production, built interactive online coursework, launched a podcast, and conducted clinical research.
+  - title: Clinical Specialist
+    start: "2014"
+    end: "2019"
+    summary: Coordinated QA/QI programs and taught continuing education. Developed and deployed analytics reports with SQL, Crystal Reports, R, and Tableau. Project manager for a major electronic health records transition, and author of a new 350-page clinical operating guidelines manual.
+  - title: In-Charge Paramedic
+    start: "2008"
+    end: "2014"
+    summary: Lead paramedic for ambulance crews in high-volume urban/suburban 911 systems and in rural 911 and interfacility transfer systems.
+
+education:
+  - school: Thomas Edison State University, Trenton, NJ
+    credential: Bachelor of Science in Business Administration
+    detail: 3.94 GPA · Sigma Alpha Tau
+    year: "2019"
+  - school: International ALERT Academy, Big Sandy, TX
+    credential: Certifications in EMS/Paramedic, Firefighter, Technical Rescue
+    year: "2007"
+
+certifications:
+  - National Registry Paramedic
+  - Texas DSHS Licensed Paramedic
+  - Texas DSHS Advanced Course Coordinator
+  - NAEMSE Level 1 and Level 2 Educator
+  - "American Heart Association Instructor: ACLS-EP, ACLS, BLS/CPR"
+  - "National Association of EMTs Instructor: AMLS, PHTLS"
+  - PEPP Course Coordinator
+  - ECSI Course Coordinator
+  - IPMBA EMS Cyclist Instructor, Bicycle Rapid Response Team
+  - Advanced Trauma Life Support (ATLS), audit
+  - FEMA ICS/NIMS 100, 200, 300, 400, 700, and 800
+  - "Texas EMTF: Ambulance Strike Team Leader, Ambulance Staging Manager, Medical Incident Support Team"
+  - { name: Texas TCFP Firefighter, lapsed: true }
+  - { name: IBSC Flight Paramedic – Certified (FP-C), lapsed: true }
+
+timeline:
+  start: 2001
+  lanes:
+    - id: media
+      label: Photo & video
+      creative: true
+      spans:
+        - { start: 2003, end: null, kind: light }
+        - { start: 2007, end: 2008, kind: solid }   # full-time documentary/photojournalism/marketing
+        - { start: 2016, end: 2019, kind: solid }   # producing training videos & podcasts
+        - { start: 2023, end: null, kind: solid }   # still producing
+      milestones:
+        - { year: 2003, label: Contract video }
+        - { year: 2007, label: Full-time photo/video, marker: false }
+        - { year: 2016, label: Producing training videos & podcasts, marker: false }
+    - id: field
+      label: Field EMS
+      spans:
+        - { start: 2005, end: 2014, kind: solid }
+        - { start: 2014, end: 2023, kind: light }
+        - { start: 2023, end: 2023.5, kind: solid } # Mar–Jun 2023 paramedic
+      milestones:
+        - { year: 2005, label: Katrina shelter → EMT class }
+        - { year: 2023, label: Back on the truck, marker: false }
+    - id: leadership
+      label: Leadership
+      spans:
+        - { start: 2006, end: 2010, kind: solid }
+        - { start: 2014, end: null, kind: solid }
+      milestones:
+        - { year: 2006, label: Quest Program Director }
+        - { year: 2019, label: Clinical Director }
+        - { year: 2023, label: DFR QM }
+    - id: teaching
+      label: Teaching
+      spans:
+        - { start: 2001, end: null, kind: solid }
+      milestones:
+        - { year: 2001, label: Started teaching }
+        - { year: 2010, label: CE classes }
+        - { year: 2014, label: EMT & paramedic }
+        - { year: 2017, label: Paramedic Program Director / ACC }
+    - id: data
+      label: Data & quality
+      spans:
+        - { start: 2014, end: null, kind: solid }
+      milestones:
+        - { year: 2014, label: EMS data analysis }

@@ -1,0 +1,30 @@
+---
+import { Image } from 'astro:assets';
+import portrait from '../assets/photos/portrait-casual.jpg';
+import Email from './Email.astro';
+import { site } from '../data/site';
+interface Props { cta?: boolean }
+const { cta = true } = Astro.props;
+---
+<footer class="site-footer">
+  <div class="wrap">
+    {cta && (
+      <div class="cta">
+        <Image src={portrait} alt="Samuel Kordik" width={192} height={192} />
+        <div>
+          <h2>Have a hard question? <span>Let’s solve it.</span></h2>
+          <p class="muted">Open to consulting and contract work in EMS quality, analytics, education, and media production.</p>
+        </div>
+        <a class="btn" href="/contact/">Work with me</a>
+      </div>
+    )}
+    <div class="base">
+      <span>© {new Date().getFullYear()} {site.name} · Photos by Samuel Kordik unless noted</span>
+      <ul>
+        <li><Email /></li>
+        {site.social.map((s) => <li><a href={s.href} rel="me">{s.label}</a></li>)}
+        <li><a href="/rss.xml">RSS</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>

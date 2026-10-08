@@ -1,0 +1,44 @@
+---
+import Base from './Base.astro';
+interface Heading { depth: number; slug: string; text: string }
+interface Props {
+  title: string;
+  description?: string;
+  eyebrow?: string;
+  lede?: string;
+  pubDate?: Date;
+  updatedDate?: Date;
+  meta?: string[];
+  headings?: Heading[];
+  image?: ImageMetadata;
+}
+const { title, description, eyebrow, lede, pubDate, updatedDate, meta = [], headings = [], image } = Astro.props;
+const fmt = (d: Date) => d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
+const toc = headings.filter((h) => h.depth === 2 || h.depth === 3).filter((h) => h.slug !== 'footnote-label');
+const showUpdated = updatedDate && pubDate && +updatedDate - +pubDate > 86400000 * 30;
+---
+<Base title={title} description={description} image={image} type="article">
+  <div class="wrap">
+    <header class="article-head">
+      {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+      <h1>{title}</h1>
+      {lede && <p class="lede">{lede}</p>}
+      <div class="article-meta">
+        {pubDate && <time datetime={pubDate.toISOString()}>{fmt(pubDate)}</time>}
+        {showUpdated && <span>Updated {fmt(updatedDate!)}</span>}
+        {meta.map((m) => <span>{m}</span>)}
+      </div>
+    </header>
+    <slot name="before" />
+    <div class="article-layout">
+      <article class="prose"><slot /></article>
+      {toc.length > 3 && (
+        <nav class="toc" aria-label="On this page">
+          <h2>On this page</h2>
+          <ol>{toc.map((h) => <li class={`d${h.depth}`}><a href={`#${h.slug}`}>{h.text}</a></li>)}</ol>
+        </nav>
+      )}
+    </div>
+    <slot name="after" />
+  </div>
+</Base>

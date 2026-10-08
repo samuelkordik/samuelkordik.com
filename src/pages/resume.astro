@@ -1,0 +1,75 @@
+---
+import Base from '../layouts/Base.astro';
+import CareerChart from '../components/CareerChart.astro';
+import { site } from '../data/site';
+
+import { resume as r } from '../data/resume';
+---
+<Base title="Resume" description="Resume of Samuel Kordik: EMS quality manager, paramedic, data analyst, and EMS educator.">
+  <div class="wrap">
+    <header class="page-head">
+      <p class="eyebrow">Resume</p>
+      <h1>Samuel Kordik</h1>
+      <p class="lede">{site.mission}</p>
+      <p class="dl no-print">{r.downloads.map((d) => <a class="btn" href={d.file}>Download {d.label} (PDF)</a>)}</p>
+    </header>
+
+    <section class="chart no-print"><CareerChart /></section>
+
+    <section class="block">
+      <h2>Experience</h2>
+      <ol class="jobs">
+        {r.experience.map((j) => (
+          <li>
+            <p class="when">{j.start} – {j.end}</p>
+            <div><h3>{j.title}</h3>{j.org && <p class="org">{j.org}</p>}<p class="sum">{j.summary}</p></div>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section class="block">
+      <h2>Education</h2>
+      <ol class="jobs">
+        {r.education.map((e) => (
+          <li><p class="when">{e.year}</p><div><h3>{e.credential}</h3><p class="org">{e.school}</p>{e.detail && <p class="sum">{e.detail}</p>}</div></li>
+        ))}
+      </ol>
+    </section>
+
+    <section class="block">
+      <h2>Certifications</h2>
+      <ul class="certs">
+        {r.certifications.map((c) => typeof c === 'string' ? <li>{c}</li> : <li class="lapsed">{c.name} <em>lapsed</em></li>)}
+      </ul>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .dl { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+  .chart { margin-bottom: 72px; }
+  .block { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 40px; border-top: 1px solid var(--rule); padding-block: 32px 48px; }
+  .block h2 { font-size: var(--h3); }
+  .jobs { list-style: none; margin: 0; padding: 0; display: grid; gap: 30px; max-width: 900px; }
+  .jobs li { display: grid; grid-template-columns: 170px minmax(0, 1fr); gap: 24px; }
+  .when { color: var(--accent-text); font: 500 0.9375rem/1.5 var(--display); padding-top: 3px; font-variant-numeric: tabular-nums; }
+  .jobs h3 { font-size: 1.5rem; }
+  .org { color: var(--sage); font-weight: 500; margin-top: 2px; }
+  .sum { color: var(--muted); margin-top: 8px; max-width: 70ch; }
+  .certs { columns: 2; column-gap: 40px; margin: 0; padding-left: 1.1em; max-width: 900px; }
+  .certs li { break-inside: avoid; margin-bottom: 8px; }
+  .certs li::marker { color: var(--accent); }
+  .lapsed { color: var(--muted); }
+  .lapsed em { font-size: 0.8125rem; text-transform: uppercase; letter-spacing: 0.08em; font-style: normal; margin-left: 6px; }
+  @media (max-width: 800px) {
+    .block, .jobs li { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+    .certs { columns: 1; }
+  }
+  @media print {
+    .page-head { padding-block: 0 12px; }
+    .block { grid-template-columns: 1fr; gap: 6px; padding-block: 12px; }
+    .jobs { gap: 12px; }
+    .jobs li { grid-template-columns: 120px 1fr; gap: 12px; break-inside: avoid; }
+  }
+</style>

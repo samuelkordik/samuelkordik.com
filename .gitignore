@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.astro/
+.env
+.env.*
+archive/
+mockups/node_modules/
+.DS_Store
+mockups/png/
+
+# Regenerable staging output of scripts/wp-export.mjs (content now lives in src/content)
+migration/content/

@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Samuel Kordik — B: Modern professional grid</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: dark-first product-style page. Hero + stat strip, then a bento grid mixing media types at different sizes. */
+:root{
+  --bg:#0d1014; --surface:#151a20; --line:#242b34; --fg:#e8ecf1; --muted:#8c96a4;
+  --accent:#8fb6ff;  /* cool ice blue for links/CTAs */
+  --rec:#ff6b6b;     /* "record" red, only on the video tile */
+  --sans:"Geist", system-ui, sans-serif; --mono:"Geist Mono", ui-monospace, monospace;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:400 16px/1.6 var(--sans)}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1240px;margin:0 auto;padding-inline:40px}
+.mono{font-family:var(--mono);font-size:12px;letter-spacing:.04em;color:var(--muted);text-transform:uppercase}
+header{display:flex;justify-content:space-between;align-items:center;padding-block:24px;border-bottom:1px solid var(--line)}
+.logo{display:flex;align-items:center;gap:12px;font-weight:600}
+.logo b{width:32px;height:32px;border-radius:8px;background:var(--fg);color:var(--bg);display:grid;place-items:center;font-size:13px;letter-spacing:-.02em}
+header nav{display:flex;gap:6px;font-size:14px}
+header nav a{padding:8px 14px;border-radius:999px;color:var(--muted)}
+header nav a.on{background:var(--surface);color:var(--fg)}
+header .cta{font-size:14px;font-weight:500;padding:9px 16px;border:1px solid var(--line);border-radius:999px}
+
+.hero{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:56px;padding-block:96px 56px;align-items:end}
+.hero h1{font:600 68px/1.02 var(--sans);letter-spacing:-.045em;margin:20px 0 0;text-wrap:balance}
+.hero h1 span{color:var(--muted)}
+.hero p{color:var(--muted);font-size:18px;margin:0 0 28px;max-width:44ch}
+.btns{display:flex;gap:12px;flex-wrap:wrap}
+.btn{padding:12px 20px;border-radius:10px;font-weight:500;font-size:15px}
+.btn.primary{background:var(--accent);color:#0b1020}
+.btn.ghost{border:1px solid var(--line)}
+
+.stats{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);border-radius:16px;margin-bottom:72px}
+.stats div{padding:24px 28px;border-left:1px solid var(--line)}
+.stats div:first-child{border-left:0}
+.stats strong{display:block;font:600 34px/1.1 var(--sans);letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.stats span{color:var(--muted);font-size:14px}
+
+.sechead{display:flex;justify-content:space-between;align-items:end;margin-bottom:20px}
+.sechead h2{font:600 28px/1.1 var(--sans);letter-spacing:-.03em;margin:8px 0 0}
+.sechead a{color:var(--accent);font-size:14px;font-weight:500}
+
+.bento{display:grid;grid-template-columns:repeat(6,1fr);grid-auto-rows:220px;gap:16px;margin-bottom:88px}
+.tile{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;padding:22px}
+.tile > img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.tile.photo::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(13,16,20,.92),rgba(13,16,20,.1) 60%)}
+.tile .txt{position:relative;z-index:1}
+.tile h3{font:600 20px/1.2 var(--sans);letter-spacing:-.02em;margin:6px 0 4px}
+.tile p{margin:0;color:var(--muted);font-size:14px}
+.tile .chart{position:relative;flex:1;margin:-22px -22px 16px;background:#fff;display:grid;place-items:center;overflow:hidden}
+.tile .chart img{width:100%;height:100%;object-fit:contain;padding:10px}
+.t1{grid-column:span 4;grid-row:span 2}
+.t2{grid-column:span 2;grid-row:span 2}
+.t3,.t4,.t5{grid-column:span 2;grid-row:span 2}
+.rec{position:absolute;top:18px;left:18px;z-index:1;display:flex;align-items:center;gap:8px;font:500 12px/1 var(--mono);color:var(--fg);background:rgba(13,16,20,.7);padding:7px 10px;border-radius:999px}
+.rec i{width:8px;height:8px;border-radius:50%;background:var(--rec)}
+.playbtn{position:absolute;z-index:1;top:50%;left:50%;width:72px;height:72px;margin:-36px 0 0 -36px;border-radius:50%;background:rgba(255,255,255,.14);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.3)}
+.playbtn::after{content:"";position:absolute;left:29px;top:24px;border-left:20px solid #fff;border-top:12px solid transparent;border-bottom:12px solid transparent}
+
+.two{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:16px;margin-bottom:88px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:28px}
+.row{display:grid;grid-template-columns:90px minmax(0,1fr) auto;gap:16px;padding:14px 0;border-top:1px solid var(--line);align-items:baseline;font-size:15px}
+.row:first-of-type{border-top:0}
+.row .d{font:400 13px/1 var(--mono);color:var(--muted)}
+.row .k{font:400 12px/1 var(--mono);color:var(--muted);border:1px solid var(--line);padding:5px 8px;border-radius:6px}
+.panel h3{margin:6px 0 14px;font:600 20px/1.2 var(--sans);letter-spacing:-.02em}
+
+footer{border-top:1px solid var(--line);padding-block:40px 56px;display:flex;justify-content:space-between;gap:24px;color:var(--muted);font-size:14px}
+footer .links{display:flex;gap:22px}
+
+@media (max-width:700px){
+  .wrap{padding-inline:16px}
+  header nav{display:none}
+  .hero{grid-template-columns:1fr;gap:20px;padding-block:48px 32px}
+  .hero h1{font-size:42px}
+  .stats{grid-template-columns:1fr 1fr}
+  .stats div:nth-child(3){border-left:0}
+  .stats div:nth-child(n+3){border-top:1px solid var(--line)}
+  .bento{grid-template-columns:1fr;grid-auto-rows:200px}
+  .t1,.t2,.t3,.t4,.t5{grid-column:auto;grid-row:span 1}
+  .t1{grid-row:span 2}
+  .two{grid-template-columns:1fr}
+  .row{grid-template-columns:1fr auto}
+  .row .d{grid-column:1/-1}
+  footer{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header><a class="logo" href="#"><b>SK</b>Samuel Kordik</a><nav><a class="on">Home</a><a>Work</a><a>Writing</a><a>Teaching</a><a>About</a></nav><a class="cta" href="#">Resume ↓</a></header>
+
+<div class="hero">
+  <div><div class="mono">EMS leader · Data analyst · Educator · Producer</div>
+  <h1>Better patient care, made visible. <span>Through data, design and video.</span></h1></div>
+  <div><p>I lead quality management for a large urban 911 system and build the dashboards, reports, films and courses that help EMS teams improve.</p>
+  <div class="btns"><a class="btn primary" href="#">View selected work</a><a class="btn ghost" href="#">Get in touch</a></div></div>
+</div>
+
+<div class="stats">
+  <div><strong>21 yrs</strong><span>in EMS, since 2005</span></div>
+  <div><strong>12 yrs</strong><span>in quality &amp; analytics</span></div>
+  <div><strong>3,020</strong><span>patients in my ketamine study</span></div>
+  <div><strong>EMT → Paramedic</strong><span>programs directed &amp; accredited</span></div>
+</div>
+
+<div class="sechead"><div><div class="mono">Portfolio</div><h2>Selected work</h2></div><a href="#">All projects →</a></div>
+<div class="bento">
+  <a class="tile photo t1" href="#"><img src="img/team-dallas.jpg" alt=""><div class="txt"><div class="mono">Design · Photography · Data</div><h3>2023 Dallas Fire-Rescue EMS Annual Report</h3><p>Led, photographed, analyzed and designed the department’s year in review.</p></div></a>
+  <a class="tile photo t2" href="#"><img src="img/vehicle.jpg" alt=""><span class="rec"><i></i>VIDEO</span><span class="playbtn"></span><div class="txt"><div class="mono">Video production</div><h3>Production reel</h3><p>Training films, recruitment and podcast work.</p></div></a>
+  <a class="tile t3" href="#"><div class="chart"><img src="img/chart-completion.jpg" alt=""></div><div class="mono">Data · R · Tableau</div><h3>Chart Completion Performance</h3></a>
+  <a class="tile t4" href="#"><div class="chart"><img src="img/hours.jpg" alt=""></div><div class="mono">Data · R</div><h3>Setting Faculty Pay</h3></a>
+  <a class="tile photo t5" href="#"><img src="img/poster.jpg" alt=""><div class="txt"><div class="mono">Research</div><h3>Ketamine vs. benzodiazepines for psychiatric emergencies</h3></div></a>
+</div>
+
+<div class="two">
+  <div class="panel"><div class="mono">Writing</div><h3>Latest posts</h3>
+    <div class="row"><span class="d">2025-10-18</span><span>Storyteller, Impresario, or Guide: approaches to dashboard development</span><span class="k">data</span></div>
+    <div class="row"><span class="d">2025-08-12</span><span>better_hist: extending ggplot2 with an opinionated histogram</span><span class="k">r</span></div>
+    <div class="row"><span class="d">2025-07-18</span><span>Pro-level YouTube downloading</span><span class="k">tools</span></div>
+    <div class="row"><span class="d">2024-10-02</span><span>Hot take: EMT-B is not a career endpoint</span><span class="k">ems</span></div>
+  </div>
+  <div class="panel"><div class="mono">Teaching</div><h3>Guides &amp; course files</h3>
+    <div class="row"><span class="d">Guide</span><span>First aid kit recommendations</span><span class="k">web</span></div>
+    <div class="row"><span class="d">Guide</span><span>Survival kit recommendations</span><span class="k">web</span></div>
+    <div class="row"><span class="d">Course</span><span>Example course: slides</span><span class="k">pdf</span></div>
+    <div class="row"><span class="d">Report</span><span>2023 DFR EMS Annual Report</span><span class="k">pdf</span></div>
+  </div>
+</div>
+
+<footer><span>© 2026 Samuel Kordik · Dallas, Texas</span><div class="links"><span>Email</span><span>LinkedIn</span><span>GitHub</span><span>ORCID</span></div></footer>
+</div>
+</body>
+</html>

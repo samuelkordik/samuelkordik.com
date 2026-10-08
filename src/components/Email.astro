@@ -1,0 +1,15 @@
+---
+// Renders mail@samuelkordik.com without putting the address in the HTML source.
+import { site } from '../data/site';
+interface Props { class?: string; label?: string }
+const { class: cls, label } = Astro.props;
+const { user, domain } = site.email;
+---
+<a class:list={['js-email', cls]} data-u={user} data-d={domain} data-label={label ?? ''} href="#contact">{label ?? `${user} [at] ${domain.replace('.', ' [dot] ')}`}</a>
+<script>
+  for (const a of document.querySelectorAll<HTMLAnchorElement>('a.js-email')) {
+    const addr = `${a.dataset.u}@${a.dataset.d}`;
+    a.href = `mailto:${addr}`;
+    if (!a.dataset.label) a.textContent = addr;
+  }
+</script>

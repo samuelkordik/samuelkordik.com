@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Samuel Kordik — round 2 template</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=Young+Serif&family=Hanken+Grotesk:wght@400;500;600&family=Newsreader:opsz,wght@6..72,400..600&family=Schibsted+Grotesk:wght@400;500;600&family=Big+Shoulders+Display:wght@600;800&family=Big+Shoulders+Text:wght@500;700&family=Barlow:wght@400;500;600&family=Barlow+Semi+Condensed:wght@500;600&family=Sofia+Sans:wght@400;500;600&family=Sofia+Sans+Condensed:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@500;600&family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..700&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<style>
+/* Layout: D hybrid. Full-bleed photo hero, three pillars, a dark media chapter, mixed work grid, learning strip, writing + teaching, off-shift. Themes override the tokens below. */
+:root{
+  --paper:#f1f0ea; --card:#ffffff; --ink:#1c2119; --muted:#5c6457; --rule:#d6d6cc;
+  --night:#1f2a1f; --green:#4b5a3c; --accent:#f26a21; --accent-text:#b8470f; --on-night:#f7b48a;
+  --display:"Archivo", system-ui, sans-serif; --body:"Archivo", system-ui, sans-serif;
+  --d-weight:750; --d-stretch:112%; --d-track:-.02em; --d-case:none; --h1:76px; --h2:46px; --h3:26px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 17px/1.6 var(--body)}
+a{color:inherit;text-decoration:none}
+h1,h2,h3,.disp{font-family:var(--display);font-weight:var(--d-weight);font-stretch:var(--d-stretch);letter-spacing:var(--d-track);text-transform:var(--d-case);text-wrap:balance}
+.wrap{max-width:1240px;margin:0 auto;padding-inline:40px}
+.eyebrow{font:600 12px/1 var(--body);letter-spacing:.14em;text-transform:uppercase;color:var(--accent-text)}
+
+nav{position:absolute;inset:0 0 auto 0;z-index:3;color:#fff}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;padding-block:28px}
+nav .name{font-size:22px}
+nav ul{display:flex;gap:30px;list-style:none;margin:0;padding:0;font-size:15px;font-weight:500;align-items:center}
+nav .hire{background:var(--accent);color:#1a1a1a;padding:9px 16px;border-radius:999px;font-weight:600}
+nav .menu{display:none}
+
+.hero{position:relative;min-height:740px;color:#fff;display:flex;align-items:flex-end;overflow:hidden}
+.hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:60% 40%}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(14,20,15,.9) 0%,rgba(14,20,15,.55) 48%,rgba(14,20,15,.05) 78%),linear-gradient(0deg,rgba(14,20,15,.7),transparent 40%)}
+.hero .wrap{position:relative;z-index:2;padding-block:150px 72px;width:100%}
+.hero .eyebrow{color:var(--on-night)}
+.hero h1{font-size:var(--h1);line-height:1;margin:18px 0 24px;max-width:13ch}
+.hero h1 span{color:var(--accent)}
+.hero p{max-width:50ch;font-size:19px;color:rgba(255,255,255,.88);margin:0}
+.credit{position:absolute;right:40px;bottom:28px;z-index:2;font-size:12px;color:rgba(255,255,255,.65)}
+
+.pillars{padding-block:96px 40px}
+.intro{display:grid;grid-template-columns:1fr 1.25fr;gap:64px;align-items:end;margin-bottom:52px}
+.intro h2{font-size:var(--h2);line-height:1.05;margin:0}
+.intro p{color:var(--muted);margin:0;max-width:54ch}
+.pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+.pillar figure{margin:0 0 18px;aspect-ratio:4/5;overflow:hidden}
+.pillar img{width:100%;height:100%;object-fit:cover}
+.pillar h3{font-size:var(--h3);line-height:1.12;margin:10px 0 8px}
+.pillar p{margin:0;color:var(--muted);font-size:16px}
+
+.media{background:var(--night);color:#fff;margin-top:96px}
+.media .wrap{display:grid;grid-template-columns:1.5fr 1fr;gap:56px;align-items:center;padding-block:96px}
+.media .frame{position:relative;aspect-ratio:16/10;overflow:hidden}
+.media .frame img{width:100%;height:100%;object-fit:cover}
+.media .eyebrow{color:var(--on-night)}
+.media h2{font-size:calc(var(--h2) * .95);line-height:1.05;margin:16px 0}
+.media p{color:rgba(255,255,255,.75);margin:0 0 22px}
+.wave{display:flex;align-items:center;gap:16px;background:rgba(255,255,255,.07);padding:14px 18px;margin-bottom:24px}
+.wave b{width:44px;height:44px;border-radius:50%;background:var(--accent);flex:none;position:relative}
+.wave b::after{content:"";position:absolute;left:17px;top:13px;border-left:14px solid #1a1a1a;border-top:9px solid transparent;border-bottom:9px solid transparent}
+.wave svg{flex:1;height:34px}
+.wave small{display:block;color:rgba(255,255,255,.6);font-size:13px}
+.links{display:flex;gap:24px;flex-wrap:wrap}
+.link{font-weight:600;border-bottom:2px solid var(--accent);padding-bottom:2px}
+
+.work{padding-block:96px 72px}
+.head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:34px;border-bottom:1px solid var(--rule);padding-bottom:16px}
+.head h2{font-size:calc(var(--h2) * .82);margin:0;line-height:1}
+.wgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px}
+.card figure{margin:0 0 14px;aspect-ratio:3/2;overflow:hidden;background:var(--card)}
+.card img{width:100%;height:100%;object-fit:cover}
+.card img.contain{object-fit:contain;padding:12px}
+.tag{display:inline-block;font:600 11px/1 var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--green);margin-right:10px}
+.card h3{font-size:calc(var(--h3) * .88);line-height:1.15;margin:8px 0 6px}
+.card p{margin:0;color:var(--muted);font-size:15.5px}
+.ph{display:grid;place-items:center;background:var(--accent) !important;color:#1a1a1a;font-weight:600;font-size:14px;text-align:center}
+.ph svg{width:70%;height:70%}
+
+.learn{border-block:1px solid var(--rule);padding-block:28px;margin-bottom:88px}
+.learn .wrap{display:grid;grid-template-columns:220px repeat(5,minmax(0,1fr));gap:24px;align-items:start}
+.learn h2{font-size:calc(var(--h3) * .9);line-height:1.1;margin:0}
+.learn .wrap>div strong{display:block;font-weight:600}
+.learn .wrap>div span{color:var(--muted);font-size:14px}
+.learn .wrap>div::before{content:"";display:block;width:22px;height:4px;background:var(--accent);margin-bottom:12px}
+
+.split{display:grid;grid-template-columns:1.25fr 1fr;gap:72px;padding-bottom:104px}
+.posts{list-style:none;margin:0;padding:0}
+.posts li{display:grid;grid-template-columns:100px 1fr;gap:20px;padding:16px 0;border-bottom:1px solid var(--rule)}
+.posts time{color:var(--muted);font-size:14px;padding-top:3px;font-variant-numeric:tabular-nums}
+.posts a{font-family:var(--display);font-weight:var(--d-weight);font-stretch:var(--d-stretch);text-transform:var(--d-case);font-size:calc(var(--h3) * .78);line-height:1.25;letter-spacing:var(--d-track)}
+.teach{background:var(--card);padding:34px}
+.teach h3{font-size:var(--h3);margin:12px 0 6px;line-height:1.1}
+.teach p{color:var(--muted);margin:0 0 18px;font-size:15.5px}
+.dl{list-style:none;margin:0;padding:0}
+.dl li{display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-top:1px solid var(--rule);font-size:15.5px}
+.dl small{color:var(--muted);white-space:nowrap}
+
+.offshift{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
+.offshift img{width:100%;height:440px;object-fit:cover;display:block}
+.offshift .note{background:var(--green);color:#fff;padding:44px;display:flex;flex-direction:column;justify-content:flex-end}
+.offshift .note .eyebrow{color:#fff;opacity:.75}
+.offshift .note h2{font-size:calc(var(--h2) * .8);line-height:1.05;margin:12px 0}
+.offshift .note p{color:rgba(255,255,255,.85);margin:0;font-size:16px}
+
+footer{padding-block:72px 56px}
+footer .wrap{display:grid;grid-template-columns:auto 1fr auto;gap:36px;align-items:center}
+footer img{width:96px;height:96px;border-radius:50%;object-fit:cover}
+footer h2{font-size:calc(var(--h2) * .78);margin:0 0 6px;line-height:1.05}
+footer h2 span{color:var(--accent-text)}
+footer p{margin:0;color:var(--muted)}
+footer .btn{background:var(--accent);color:#1a1a1a;font-weight:600;padding:14px 22px;border-radius:999px;white-space:nowrap}
+
+@media (max-width:700px){
+  body{font-size:16px}
+  .wrap{padding-inline:20px}
+  nav ul{display:none} nav .menu{display:block;font-weight:600}
+  .hero{min-height:660px}
+  .hero::after{background:linear-gradient(0deg,rgba(14,20,15,.94) 12%,rgba(14,20,15,.4) 62%,rgba(14,20,15,.25))}
+  .hero h1{font-size:calc(var(--h1) * .6)}
+  .hero p{font-size:16.5px}
+  .pillars{padding-block:64px 16px}
+  .intro,.pgrid,.media .wrap,.split,footer .wrap{grid-template-columns:1fr;gap:26px}
+  .intro h2{font-size:calc(var(--h2) * .75)}
+  .pillar figure{aspect-ratio:3/2}
+  .media{margin-top:64px} .media .wrap{padding-block:64px}
+  .wgrid{grid-template-columns:1fr}
+  .learn .wrap{grid-template-columns:1fr 1fr}
+  .learn h2{grid-column:1/-1}
+  .posts li{grid-template-columns:1fr;gap:2px}
+  .offshift{grid-template-columns:1fr}
+  .offshift img{height:240px}
+  .offshift .note{padding:32px 20px}
+  .credit{display:none}
+}
+</style>
+</head>
+<body>
+<nav><div class="wrap"><a class="name disp" href="#">Samuel Kordik</a>
+<ul><li>Work</li><li>Writing</li><li>Teaching</li><li>About</li><li>Resume</li><li class="hire">Work with me</li></ul><span class="menu">Menu</span></div></nav>
+
+<header class="hero">
+  <img src="img/hero-ambulance.jpg" alt="Paramedics starting a blood transfusion in the back of an ambulance">
+  <div class="wrap">
+    <div class="eyebrow">Paramedic · Quality leader · Analyst · Photographer · Teacher</div>
+    <h1>I build things, solve problems, and <span>never stop learning.</span></h1>
+    <p>I improve out-of-hospital emergency medical care by answering questions, solving problems, and teaching others to do the same.</p>
+  </div>
+  <div class="credit">Prehospital blood transfusion, Cypress Creek EMS · photo by Samuel Kordik</div>
+</header>
+
+<section class="pillars wrap">
+  <div class="intro">
+    <h2>Twenty-one years in EMS, and still learning.</h2>
+    <p>I lead the Quality Management Division at the Dallas Fire-Rescue Office of the Medical Director. I came up as a paramedic, and I’ve been paid to hold a camera since 2003. I can’t stop learning new tools.</p>
+  </div>
+  <div class="pgrid">
+    <a class="pillar" href="#"><figure><img src="img/portrait-formal.jpg" alt="" style="object-position:50% 20%"></figure><div class="eyebrow">Lead</div><h3>EMS quality &amp; leadership</h3><p>Quality programs that help EMS systems see what is really happening on scene.</p></a>
+    <a class="pillar" href="#"><figure><img src="img/chart-completion.jpg" alt=""></figure><div class="eyebrow">Analyze</div><h3>Data that changes decisions</h3><p>Dashboards, R, and visual storytelling that turn backlogs and payroll tables into action.</p></a>
+    <a class="pillar" href="#"><figure><img src="img/training.jpg" alt=""></figure><div class="eyebrow">Teach</div><h3>Education that sticks</h3><p>Paramedic program director, course coordinator, and instructor for ACLS, PHTLS, AMLS and more.</p></a>
+  </div>
+</section>
+
+<section class="media">
+  <div class="wrap">
+    <a class="frame" href="#"><img src="img/vehicle.jpg" alt=""></a>
+    <div>
+      <div class="eyebrow">Photo · Video · Audio</div>
+      <h2>Behind the camera since 2003.</h2>
+      <p>I worked full-time in documentary, photojournalism and marketing before EMS took over. Every photo on this site is mine, apart from the ones of me.</p>
+      <div class="wave"><b></b>
+        <svg viewBox="0 0 200 34" preserveAspectRatio="none" aria-hidden="true"><g fill="rgba(255,255,255,.55)"><rect x="0" y="12" width="3" height="10"/><rect x="6" y="8" width="3" height="18"/><rect x="12" y="4" width="3" height="26"/><rect x="18" y="10" width="3" height="14"/><rect x="24" y="2" width="3" height="30"/><rect x="30" y="9" width="3" height="16"/><rect x="36" y="13" width="3" height="8"/><rect x="42" y="6" width="3" height="22"/><rect x="48" y="11" width="3" height="12"/><rect x="54" y="3" width="3" height="28"/><rect x="60" y="8" width="3" height="18"/><rect x="66" y="12" width="3" height="10"/><rect x="72" y="5" width="3" height="24"/><rect x="78" y="10" width="3" height="14"/><rect x="84" y="7" width="3" height="20"/><rect x="90" y="13" width="3" height="8"/><rect x="96" y="4" width="3" height="26"/><rect x="102" y="9" width="3" height="16"/><rect x="108" y="11" width="3" height="12"/><rect x="114" y="6" width="3" height="22"/><rect x="120" y="2" width="3" height="30"/><rect x="126" y="10" width="3" height="14"/><rect x="132" y="12" width="3" height="10"/><rect x="138" y="7" width="3" height="20"/><rect x="144" y="4" width="3" height="26"/><rect x="150" y="11" width="3" height="12"/><rect x="156" y="8" width="3" height="18"/><rect x="162" y="13" width="3" height="8"/><rect x="168" y="5" width="3" height="24"/><rect x="174" y="10" width="3" height="14"/><rect x="180" y="6" width="3" height="22"/><rect x="186" y="12" width="3" height="10"/><rect x="192" y="9" width="3" height="16"/></g></svg>
+        <div style="min-width:0"><strong>Cypress Creek EMS Podcast</strong><small>On almost every episode</small></div></div>
+      <div class="links"><a class="link" href="#">See photography</a><a class="link" href="#">Podcast appearances</a></div>
+    </div>
+  </div>
+</section>
+
+<section class="work wrap">
+  <div class="head"><h2>Selected work</h2><a class="link" href="#">All work</a></div>
+  <div class="wgrid">
+    <a class="card" href="#"><figure><img src="img/team-dallas.jpg" alt=""></figure><span class="tag">Design</span><span class="tag">Photo</span><span class="tag">Data</span><h3>2023 Dallas Fire-Rescue EMS Annual Report</h3><p>Led it, shot it, analyzed it, and designed it.</p></a>
+    <a class="card" href="#"><figure><img class="contain" src="img/chart-completion.jpg" alt=""></figure><span class="tag">Data</span><h3>Chart Completion Performance</h3><p>Rolling 30-day windows that show which interventions worked.</p></a>
+    <a class="card" href="#"><figure><img src="img/poster.jpg" alt=""></figure><span class="tag">Research</span><h3>Ketamine for psychiatric emergencies</h3><p>First-author study of 3,020 patients, Prehospital Care Research Forum.</p></a>
+    <a class="card" href="#"><figure><img class="contain" src="img/hours.jpg" alt=""></figure><span class="tag">Data</span><h3>Setting Faculty Pay</h3><p>Historic payroll → fair extra-duty teaching rates.</p></a>
+    <a class="card" href="#"><figure class="ph"><svg viewBox="0 0 120 80" aria-hidden="true"><g fill="none" stroke="#1a1a1a" stroke-width="2"><path d="M20 60h80M28 60V30h64v30M40 30V18h40v12"/><path d="M34 52h52M34 44h52M34 36h52" stroke-dasharray="3 3"/></g></svg></figure><span class="tag">Workshop</span><h3>3D printing &amp; CAD</h3><p>Parts, fixtures and fixes designed in Onshape and printed at home.</p></a>
+    <a class="card" href="#"><figure><img class="contain" src="img/better-hist.png" alt=""></figure><span class="tag">Code</span><h3>better_hist for ggplot2</h3><p>An opinionated histogram from my personal R package.</p></a>
+  </div>
+</section>
+
+<section class="learn">
+  <div class="wrap">
+    <h2>Currently learning</h2>
+    <div><strong>DaVinci Resolve</strong><span>Editing &amp; color, 2026</span></div>
+    <div><strong>Onshape</strong><span>Parametric CAD, 2026</span></div>
+    <div><strong>Blender</strong><span>3D modeling, 2026</span></div>
+    <div><strong>3D printing</strong><span>Zero to expert, 2026</span></div>
+    <div><strong>Differential geometry</strong><span>For fun</span></div>
+  </div>
+</section>
+
+<section class="split wrap">
+  <div>
+    <div class="head"><h2>Writing</h2><a class="link" href="#">Archive</a></div>
+    <ul class="posts">
+      <li><time>Oct 2025</time><a href="#">Storyteller, Impresario, or Guide: approaches to dashboard development</a></li>
+      <li><time>Aug 2025</time><a href="#">better_hist: extending ggplot2 with an opinionated histogram</a></li>
+      <li><time>Jul 2025</time><a href="#">Survival kit recommendations</a></li>
+      <li><time>Oct 2024</time><a href="#">Hot take: EMT-B is not a career endpoint</a></li>
+    </ul>
+  </div>
+  <aside class="teach">
+    <div class="eyebrow">Teaching &amp; guides</div>
+    <h3>Course materials</h3>
+    <p>Handouts, slides and references for the classes I teach, free to download.</p>
+    <ul class="dl">
+      <li><span>First aid kit recommendations</span><small>Guide</small></li>
+      <li><span>Survival kit recommendations</span><small>Guide</small></li>
+      <li><span>Example course: handouts &amp; slides</span><small>PDF</small></li>
+      <li><span>2023 DFR EMS Annual Report</span><small>PDF</small></li>
+    </ul>
+  </aside>
+</section>
+
+<section class="offshift">
+  <img src="img/trail.jpg" alt="Mountain trail above treeline">
+  <div class="note"><div class="eyebrow">Off shift</div><h2>Five foster kids, three adoptions, one dog, one turtle.</h2><p>Plus backpacking, too many books, cooking, and a 3D printer that rarely gets a day off.</p></div>
+  <img src="img/lake.jpg" alt="Alpine lake reflecting clouds">
+</section>
+
+<footer>
+  <div class="wrap">
+    <img src="img/portrait.jpg" alt="Samuel Kordik">
+    <div><h2>Have a hard question? <span>Let’s solve it.</span></h2><p>Open to consulting and contract work in EMS quality, analytics, and education.</p></div>
+    <a class="btn" href="#">Work with me</a>
+  </div>
+</footer>
+</body>
+</html>

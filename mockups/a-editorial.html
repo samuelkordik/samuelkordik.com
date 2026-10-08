@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Samuel Kordik — A: Editorial minimal</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..500&family=Public+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: a single asymmetric reading column (text at left, margin notes at right), work presented as an annotated index. */
+:root{
+  --paper:#fbfbfa; --ink:#15171c; --muted:#646a76; --rule:#e2e3e7;
+  --accent:#2a3fcb;   /* ultramarine: links, italics, the one bold note */
+  --wash:#eef0fb;
+  --display:"Newsreader", "Iowan Old Style", Georgia, serif;
+  --body:"Public Sans", system-ui, sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 17px/1.65 var(--body)}
+a{color:inherit;text-decoration:none}
+.page{max-width:1120px;margin:0 auto;padding-inline:56px}
+header.top{display:flex;justify-content:space-between;align-items:baseline;padding-block:36px 0;font-size:15px}
+header.top .mark{font:500 20px/1 var(--display);letter-spacing:-.01em}
+header.top nav{display:flex;gap:28px;color:var(--muted)}
+header.top nav a:first-child{color:var(--ink)}
+
+.hero{display:grid;grid-template-columns:minmax(0,1fr) 240px;gap:72px;padding-block:120px 104px;align-items:end;border-bottom:1px solid var(--rule)}
+.hero h1{font:300 62px/1.08 var(--display);letter-spacing:-.022em;margin:0;text-wrap:balance}
+.hero h1 em{color:var(--accent);font-weight:400}
+.hero .side{font-size:14.5px;color:var(--muted);line-height:1.55}
+.hero .side img{width:100%;aspect-ratio:4/5;object-fit:cover;object-position:50% 20%;margin-bottom:16px;filter:grayscale(1) contrast(1.05)}
+.hero .side strong{color:var(--ink);font-weight:600;display:block}
+
+section{display:grid;grid-template-columns:200px minmax(0,1fr);gap:56px;padding-block:72px;border-bottom:1px solid var(--rule)}
+section > h2{font:500 13px/1.4 var(--body);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:6px 0 0}
+section > h2 small{display:block;text-transform:none;letter-spacing:0;font-weight:400;margin-top:8px;font-size:14px}
+
+.index{list-style:none;margin:0;padding:0}
+.index li{display:grid;grid-template-columns:64px minmax(0,1fr) 150px;gap:24px;padding:22px 0;border-top:1px solid var(--rule);align-items:baseline}
+.index li:first-child{border-top:0;padding-top:0}
+.index .yr{font-size:14px;color:var(--muted);font-variant-numeric:tabular-nums}
+.index h3{font:400 28px/1.2 var(--display);margin:0 0 4px;letter-spacing:-.01em}
+.index p{margin:0;color:var(--muted);max-width:56ch;font-size:16px}
+.index .med{font-size:13px;color:var(--muted);text-align:right}
+.index li.feature{grid-template-columns:64px minmax(0,1fr) 150px;background:var(--wash);margin-inline:-24px;padding:24px;border-top-color:transparent}
+.index li.feature + li{border-top-color:transparent}
+.index .thumb{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:18px}
+.index .thumb img{width:100%;aspect-ratio:3/2;object-fit:cover}
+
+.prose{max-width:62ch}
+.prose p{margin:0 0 18px;font:400 21px/1.6 var(--display)}
+.prose p:first-child::first-letter{font-size:1.15em}
+.prose a{color:var(--accent);border-bottom:1px solid currentColor}
+
+.posts{list-style:none;margin:0;padding:0}
+.posts li{display:flex;justify-content:space-between;gap:24px;padding:14px 0;border-top:1px solid var(--rule)}
+.posts li:first-child{border-top:0;padding-top:0}
+.posts a{font:400 22px/1.3 var(--display)}
+.posts time{color:var(--muted);font-size:14px;white-space:nowrap;font-variant-numeric:tabular-nums;padding-top:5px}
+
+.files{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 40px}
+.files div{padding:14px 0;border-top:1px solid var(--rule);display:flex;justify-content:space-between;gap:12px;font-size:16px}
+.files small{color:var(--muted);white-space:nowrap}
+
+footer{display:flex;justify-content:space-between;gap:24px;padding-block:48px 64px;font-size:15px;color:var(--muted)}
+footer .say{font:400 30px/1.2 var(--display);color:var(--ink)}
+footer .say a{color:var(--accent)}
+footer .elsewhere{display:flex;gap:22px;align-self:end}
+
+@media (max-width:700px){
+  body{font-size:16px}
+  .page{padding-inline:20px}
+  header.top nav{display:none}
+  .hero{grid-template-columns:1fr;gap:32px;padding-block:56px}
+  .hero h1{font-size:38px}
+  .hero .side{display:grid;grid-template-columns:96px 1fr;gap:16px;align-items:center}
+  .hero .side img{margin:0}
+  section{grid-template-columns:1fr;gap:20px;padding-block:48px}
+  .index li,.index li.feature{grid-template-columns:1fr;gap:4px}
+  .index li.feature{margin-inline:-20px;padding:20px}
+  .index .med{text-align:left}
+  .index h3{font-size:24px}
+  .prose p{font-size:19px}
+  .posts li{flex-direction:column;gap:2px}
+  .files{grid-template-columns:1fr}
+  footer{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<div class="page">
+<header class="top"><a class="mark" href="#">Samuel Kordik</a><nav><a>Work</a><a>Writing</a><a>Teaching</a><a>About</a><a>Resume</a></nav></header>
+
+<div class="hero">
+  <h1>I help emergency medicine <em>see itself clearly</em>, with data, a camera, and a classroom.</h1>
+  <div class="side"><img src="img/portrait-formal.jpg" alt="Samuel Kordik"><div><strong>EMS Quality Manager</strong>Dallas Fire-Rescue Office of the Medical Director · Parkland/BioTel. Paramedic since 2008.</div></div>
+</div>
+
+<section>
+  <h2>Selected work<small>Data, design, photo, video</small></h2>
+  <ul class="index">
+    <li class="feature"><span class="yr">2023</span><div><h3>Dallas Fire-Rescue EMS Annual Report</h3><p>A year of a 911 EMS system told in photographs, numbers and plain language. I led it, shot much of it, and designed it.</p>
+      <div class="thumb"><img src="img/team-dallas.jpg" alt=""><img src="img/hero-ambulance.jpg" alt=""><img src="img/chart-completion.jpg" alt=""></div></div><span class="med">Design · Photo · Data</span></li>
+    <li><span class="yr">2023</span><div><h3>Chart Completion Performance</h3><p>Rolling 30-day windows for charts open past 24 hours, 4 days and 8 days, matched to one 4-day rotation.</p></div><span class="med">Data · R · Tableau</span></li>
+    <li><span class="yr">2023</span><div><h3>Setting Faculty Pay</h3><p>Using historic payroll to set fair extra-duty teaching rates under blended-overtime rules.</p></div><span class="med">Data · R</span></li>
+    <li><span class="yr">2019</span><div><h3>Ketamine for psychiatric emergencies</h3><p>First-author study, 3,020 patients, Prehospital Care Research Forum.</p></div><span class="med">Research</span></li>
+    <li><span class="yr">Ongoing</span><div><h3>Training film &amp; podcast production</h3><p>Course video, recruitment pieces, and an EMS education podcast, shot and mixed in-house.</p></div><span class="med">Video · Audio</span></li>
+  </ul>
+</section>
+
+<section>
+  <h2>About</h2>
+  <div class="prose">
+    <p>In 2005 I spent two weeks volunteering with EMS crews at the Hurricane Katrina evacuee shelter in Houston, then signed up for an EMT class. Twenty-one years later I still think it’s the best profession there is.</p>
+    <p>Along the way I taught paramedics, ran accredited education programs, learned statistics, and picked up a camera. These days I lead a quality management division. Off shift I backpack, cook, build things, and read <a href="#">too many books</a> at once.</p>
+  </div>
+</section>
+
+<section>
+  <h2>Writing</h2>
+  <ul class="posts">
+    <li><a href="#">Storyteller, Impresario, or Guide: varying approaches to dashboard development</a><time>18 Oct 2025</time></li>
+    <li><a href="#">better_hist: extending ggplot2 with an opinionated histogram</a><time>12 Aug 2025</time></li>
+    <li><a href="#">Pro-level YouTube downloading</a><time>18 Jul 2025</time></li>
+    <li><a href="#">Hot take: EMT-B is not a career endpoint</a><time>2 Oct 2024</time></li>
+    <li><a href="#">On being a competent generalist</a><time>8 Jul 2024</time></li>
+  </ul>
+</section>
+
+<section>
+  <h2>Teaching<small>Guides &amp; course files</small></h2>
+  <div class="files">
+    <div><span>First aid kit recommendations</span><small>Guide</small></div>
+    <div><span>Survival kit recommendations</span><small>Guide</small></div>
+    <div><span>Example course: slides</span><small>PDF · 4.2 MB</small></div>
+    <div><span>Example course: handout</span><small>PDF · 310 KB</small></div>
+  </div>
+</section>
+
+<footer>
+  <div class="say">Say hello: <a href="#">mail@samuelkordik.com</a></div>
+  <div class="elsewhere"><span>LinkedIn</span><span>GitHub</span><span>ORCID</span><span>Goodreads</span></div>
+</footer>
+</div>
+</body>
+</html>

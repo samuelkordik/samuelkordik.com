@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blood Product Check Character Calculator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #0d0f14;
+      --surface:  #141720;
+      --surface2: #1c2030;
+      --border:   #252a3a;
+      --border2:  #2e3550;
+      --text:     #dde3f0;
+      --muted:    #6b7494;
+      --faint:    #363d55;
+      --red:      #c0392b;
+      --red-dim:  #7a1f18;
+      --red-glow: rgba(192,57,43,0.15);
+      --green:    #27ae60;
+      --green-dim: rgba(39,174,96,0.12);
+      --amber:    #e67e22;
+      --amber-dim: rgba(230,126,34,0.12);
+      --accent:   #c0392b;
+      --mono:     'IBM Plex Mono', monospace;
+      --sans:     'IBM Plex Sans', sans-serif;
+    }
+
+    html { font-size: 16px; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 16px 80px;
+    }
+
+    /* ── Header ── */
+    header {
+      width: 100%;
+      max-width: 720px;
+      margin-bottom: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .header-eyebrow {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--red);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .header-eyebrow::before {
+      content: '';
+      display: block;
+      width: 20px;
+      height: 2px;
+      background: var(--red);
+    }
+
+    h1 {
+      font-family: var(--mono);
+      font-size: clamp(20px, 4vw, 28px);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #fff;
+      line-height: 1.1;
+    }
+
+    h1 span {
+      color: var(--red);
+    }
+
+    .header-sub {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 300;
+      margin-top: 4px;
+    }
+
+    /* ── Card ── */
+    .card {
+      width: 100%;
+      max-width: 720px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+
+    .card-header {
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--surface2);
+    }
+
+    .card-label {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--faint);
+      flex-shrink: 0;
+    }
+
+    .dot.active { background: var(--red); box-shadow: 0 0 8px var(--red); animation: pulse 2s ease-in-out infinite; }
+    .dot.ok     { background: var(--green); box-shadow: 0 0 8px var(--green); }
+    .dot.warn   { background: var(--amber); box-shadow: 0 0 8px var(--amber); }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    .card-body { padding: 24px 20px; }
+
+    /* ── Input ── */
+    .input-wrapper {
+      position: relative;
+    }
+
+    .din-label {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .din-input {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border2);
+      border-radius: 3px;
+      padding: 14px 100px 14px 16px;
+      font-family: var(--mono);
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      color: #fff;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      text-transform: uppercase;
+    }
+
+    .din-input::placeholder {
+      color: var(--faint);
+      font-weight: 400;
+      letter-spacing: 0.08em;
+    }
+
+    .din-input:focus {
+      border-color: var(--red);
+      box-shadow: 0 0 0 3px var(--red-glow);
+    }
+
+    .input-count {
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted);
+      pointer-events: none;
+    }
+
+    .input-hint {
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    /* ── Mode tabs ── */
+    .mode-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 18px;
+    }
+
+    .mode-btn {
+      flex: 1;
+      padding: 9px 12px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.15s;
+      text-align: center;
+    }
+
+    .mode-btn:hover { border-color: var(--border2); color: var(--text); }
+
+    .mode-btn.active {
+      background: var(--red-glow);
+      border-color: var(--red-dim);
+      color: #fff;
+    }
+
+    /* ── Result banner ── */
+    .result-banner {
+      display: none;
+      margin-top: 20px;
+      padding: 20px;
+      border-radius: 3px;
+      border: 1px solid var(--border);
+      background: var(--surface2);
+      animation: slideIn 0.25s ease;
+    }
+
+    .result-banner.visible { display: block; }
+    .result-banner.success { border-color: #27ae6055; background: var(--green-dim); }
+    .result-banner.error   { border-color: var(--red-dim); background: var(--red-glow); }
+    .result-banner.info    { border-color: #3d4f7a; }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .result-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .result-label {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .check-char-display {
+      font-family: var(--mono);
+      font-size: 52px;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1;
+      text-shadow: 0 0 30px rgba(255,255,255,0.15);
+    }
+
+    .full-din-display {
+      font-family: var(--mono);
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--text);
+      letter-spacing: 0.1em;
+      word-break: break-all;
+    }
+
+    .full-din-display .check-highlight {
+      color: var(--red);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .verify-status {
+      font-family: var(--mono);
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+    }
+
+    .verify-status.ok   { color: var(--green); }
+    .verify-status.fail { color: var(--red); }
+
+    /* ── Steps table ── */
+    .steps-toggle {
+      margin-top: 12px;
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.15s;
+    }
+
+    .steps-toggle:hover { color: var(--text); }
+
+    .steps-toggle .chevron {
+      display: inline-block;
+      transition: transform 0.2s;
+    }
+
+    .steps-toggle.open .chevron { transform: rotate(180deg); }
+
+    .steps-table-wrap {
+      display: none;
+      margin-top: 16px;
+      overflow-x: auto;
+    }
+
+    .steps-table-wrap.open { display: block; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: var(--mono);
+      font-size: 12px;
+    }
+
+    thead tr {
+      border-bottom: 1px solid var(--border2);
+    }
+
+    th {
+      text-align: left;
+      padding: 6px 12px;
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    td {
+      padding: 7px 12px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+      white-space: nowrap;
+    }
+
+    tbody tr:last-child td { border-bottom: none; }
+
+    tbody tr:hover td { background: rgba(255,255,255,0.02); }
+
+    td.char-cell {
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+      width: 50px;
+    }
+
+    td.val-cell  { color: var(--muted); }
+    td.calc-cell { color: var(--muted); font-size: 11px; }
+
+    td.p-cell {
+      font-weight: 600;
+      color: var(--red);
+    }
+
+    td.p-cell-final {
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .solve-row {
+      border-top: 1px solid var(--border2) !important;
+      background: rgba(192,57,43,0.06);
+    }
+
+    /* ── Format reference ── */
+    .format-ref {
+      width: 100%;
+      max-width: 720px;
+      margin-top: 8px;
+    }
+
+    .format-diagram {
+      display: flex;
+      font-family: var(--mono);
+      font-size: 11px;
+      flex-wrap: wrap;
+    }
+
+    .seg {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .seg-chars {
+      display: flex;
+    }
+
+    .seg-char {
+      width: 26px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0;
+      border: 1px solid var(--border);
+      border-right: none;
+      color: var(--text);
+      background: var(--surface2);
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
+    }
+
+    .seg-char:last-child { border-right: 1px solid var(--border); }
+
+    .seg-char.highlight { background: var(--red-glow); border-color: var(--red-dim); color: #fff; }
+    .seg-char.dim       { color: var(--faint); background: var(--bg); }
+
+    .seg-label {
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 5px;
+    }
+
+    /* ── Footer ── */
+    footer {
+      margin-top: 40px;
+      width: 100%;
+      max-width: 720px;
+      border-top: 1px solid var(--border);
+      padding-top: 16px;
+      font-size: 11px;
+      color: var(--faint);
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 4px;
+      font-family: var(--mono);
+    }
+
+    /* ── Copy button ── */
+    .copy-btn {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      padding: 5px 10px;
+      transition: all 0.15s;
+    }
+
+    .copy-btn:hover { border-color: var(--border2); color: var(--text); }
+    .copy-btn.copied { border-color: var(--green); color: var(--green); }
+
+    /* Divider in result */
+    .result-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 14px 0;
+    }
+
+    .error-msg {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--red);
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-eyebrow">ISO/IEC 7064 · MOD 37-2</div>
+  <h1>Blood Product <span>Check Character</span> Calculator</h1>
+  <p class="header-sub">Donation Identification Number (DIN) · Blood Product Verification</p>
+</header>
+
+<!-- Input Card -->
+<div class="card">
+  <div class="card-header">
+    <div class="dot active" id="statusDot"></div>
+    <span class="card-label">Donation ID Entry</span>
+  </div>
+  <div class="card-body">
+    <label class="din-label" for="dinInput">Enter Donation ID Number</label>
+    <div class="input-wrapper">
+      <input
+        type="text"
+        id="dinInput"
+        class="din-input"
+        placeholder="W1849 25 100564"
+        maxlength="20"
+        autocomplete="off"
+        autocorrect="off"
+        spellcheck="false"
+      >
+      <span class="input-count" id="inputCount">0 / 13</span>
+    </div>
+    <p class="input-hint" id="inputHint">Enter the 13-character data string (spaces ignored) — or include the check character to verify.</p>
+
+    <div class="mode-row">
+      <button class="mode-btn active" id="modeCalc" onclick="setMode('calc')">Calculate</button>
+      <button class="mode-btn" id="modeVerify" onclick="setMode('verify')">Verify</button>
+    </div>
+
+    <!-- Result Banner -->
+    <div class="result-banner" id="resultBanner">
+      <div id="resultContent"></div>
+      <button class="steps-toggle" id="stepsToggle" onclick="toggleSteps()">
+        <span class="chevron">▼</span> Show step-by-step calculation
+      </button>
+      <div class="steps-table-wrap" id="stepsWrap">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Char</th>
+              <th>Value</th>
+              <th>Calculation</th>
+              <th>P</th>
+            </tr>
+          </thead>
+          <tbody id="stepsBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Format Reference Card -->
+<div class="card format-ref">
+  <div class="card-header">
+    <div class="dot"></div>
+    <span class="card-label">DIN Format Reference</span>
+  </div>
+  <div class="card-body">
+    <div class="format-diagram" id="formatDiagram">
+      <!-- populated by JS -->
+    </div>
+  </div>
+</div>
+
+<footer>
+  <span>ISBT 128 Standard · Donation Identification Number</span>
+  <span>Algorithm: ISO/IEC 7064 MOD 37-2</span>
+</footer>
+
+<script>
+  // ── Algorithm ────────────────────────────────────────────────────────────
+  const CHECK_CHARS = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ*';
+
+  function charValue(c) {
+    const u = c.toUpperCase();
+    if (u >= '0' && u <= '9') return parseInt(u);
+    if (u >= 'A' && u <= 'Z') return u.charCodeAt(0) - 65 + 10;
+    return -1;
+  }
+
+  function calculateCheckChar(data13) {
+    let p = 0;
+    const steps = [];
+    for (let i = 0; i < data13.length; i++) {
+      const c = data13[i].toUpperCase();
+      const val = charValue(c);
+      if (val < 0) return null; // invalid char
+      const prevP = p;
+      p = (2 * p + val) % 37;
+      steps.push({
+        idx: i + 1,
+        char: c,
+        value: val,
+        calc: `(2 × ${prevP} + ${val}) mod 37`,
+        result: p
+      });
+    }
+    const C = ((1 - 2 * p) % 37 + 37) % 37;
+    return { checkValue: C, checkChar: CHECK_CHARS[C], steps, finalP: p };
+  }
+
+  function verifyDIN(data14plus) {
+    // data14plus: 13 data chars + 1 check char (+ optional flag)
+    const data13  = data14plus.slice(0, 13);
+    const checkCh = data14plus[13].toUpperCase();
+    const result = calculateCheckChar(data13);
+    if (!result) return null;
+    const expected = result.checkChar;
+    return { ...result, checkChar: checkCh, expected, valid: checkCh === expected };
+  }
+
+  // ── State ─────────────────────────────────────────────────────────────────
+  let mode = 'calc'; // 'calc' | 'verify'
+  let lastResult = null;
+  let stepsOpen = false;
+
+  function setMode(m) {
+    mode = m;
+    document.getElementById('modeCalc').classList.toggle('active', m === 'calc');
+    document.getElementById('modeVerify').classList.toggle('active', m === 'verify');
+    const hint = document.getElementById('inputHint');
+    if (m === 'calc') {
+      hint.textContent = 'Enter the 13-character data string (spaces ignored).';
+    } else {
+      hint.textContent = 'Enter 14 characters (13 data + check character) to verify.';
+    }
+    processInput();
+  }
+
+  // ── Format Diagram ────────────────────────────────────────────────────────
+  function renderFormatDiagram(stripped) {
+    const segs = [
+      { label: 'Facility ID', len: 5, highlight: true },
+      { label: 'Year', len: 2, highlight: true },
+      { label: 'Sequence', len: 6, highlight: true },
+      { label: 'Check', len: 1, highlight: false, isCheck: true },
+      { label: 'Flag', len: 2, highlight: false, dim: true },
+    ];
+
+    let html = '';
+    let pos = 0;
+    segs.forEach(seg => {
+      html += `<div class="seg">`;
+      html += `<div class="seg-chars">`;
+      for (let i = 0; i < seg.len; i++) {
+        const ch = stripped[pos] || (seg.isCheck ? '?' : '·');
+        const filled = pos < stripped.length;
+        let cls = '';
+        if (seg.dim) cls = 'dim';
+        else if (seg.isCheck) cls = filled ? 'highlight' : '';
+        else if (seg.highlight && filled) cls = '';
+        html += `<div class="seg-char ${cls}">${ch.toUpperCase()}</div>`;
+        pos++;
+      }
+      html += `</div>`;
+      html += `<span class="seg-label">${seg.label}</span>`;
+      html += `</div>`;
+    });
+
+    document.getElementById('formatDiagram').innerHTML = html;
+  }
+
+  // ── Main processing ────────────────────────────────────────────────────────
+  function processInput() {
+    const raw = document.getElementById('dinInput').value;
+    const stripped = raw.replace(/\s+/g, '').toUpperCase();
+    const len = stripped.length;
+
+    document.getElementById('inputCount').textContent = `${len} / ${mode === 'calc' ? 13 : 14}`;
+
+    const banner   = document.getElementById('resultBanner');
+    const content  = document.getElementById('resultContent');
+    const dot      = document.getElementById('statusDot');
+
+    // Update diagram
+    renderFormatDiagram(stripped);
+
+    if (len === 0) {
+      banner.className = 'result-banner';
+      dot.className = 'dot active';
+      return;
+    }
+
+    // Validate characters
+    const invalid = [...stripped].filter(c => charValue(c) < 0);
+    if (invalid.length) {
+      banner.className = 'result-banner error visible';
+      content.innerHTML = `<span class="error-msg">Invalid character(s): ${invalid.join(', ')} — DIN allows 0-9 and A-Z only.</span>`;
+      dot.className = 'dot warn';
+      document.getElementById('stepsToggle').style.display = 'none';
+      return;
+    }
+
+    if (mode === 'calc') {
+      if (len < 13) {
+        banner.className = 'result-banner';
+        dot.className = 'dot active';
+        return;
+      }
+      const data13 = stripped.slice(0, 13);
+      const result = calculateCheckChar(data13);
+      if (!result) return;
+      lastResult = result;
+
+      const facilityID = data13.slice(0, 5);
+      const year       = data13.slice(5, 7);
+      const seq        = data13.slice(7, 13);
+      const fullDIN    = `${facilityID}${year}${seq}${result.checkChar}00`;
+      const dinFormatted = `${facilityID} ${year} ${seq} <span class="check-highlight">${result.checkChar}</span> 00`;
+
+      banner.className = 'result-banner info visible';
+      dot.className = 'dot ok';
+      content.innerHTML = `
+        <div class="result-row">
+          <div>
+            <div class="result-label">Check Character</div>
+            <div class="check-char-display">${result.checkChar}</div>
+            <div style="font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:4px;">Value ${result.checkValue} → MOD 37 index</div>
+          </div>
+          <div style="text-align:right;">
+            <div class="result-label">Complete DIN</div>
+            <div class="full-din-display">${dinFormatted}</div>
+            <button class="copy-btn" onclick="copyDIN('${fullDIN}', this)" style="margin-top:8px;">Copy DIN</button>
+          </div>
+        </div>
+        <div class="result-divider"></div>
+        <div style="font-family:var(--mono);font-size:11px;color:var(--muted);">
+          Solve: (2 × ${result.finalP} + C) mod 37 = 1 &nbsp;→&nbsp; C = ${result.checkValue} &nbsp;→&nbsp; <strong style="color:#fff;">${result.checkChar}</strong>
+        </div>
+      `;
+      renderStepsTable(result.steps, result.finalP, result.checkValue, result.checkChar);
+      document.getElementById('stepsToggle').style.display = 'flex';
+      renderFormatDiagram(data13 + result.checkChar + '00');
+    }
+
+    else { // verify
+      if (len < 14) {
+        banner.className = 'result-banner';
+        dot.className = 'dot active';
+        return;
+      }
+      const res = verifyDIN(stripped);
+      if (!res) return;
+      lastResult = res;
+
+      const data13  = stripped.slice(0, 13);
+      const checkCh = stripped[13];
+      const flag    = stripped.slice(14, 16) || '??';
+
+      if (res.valid) {
+        banner.className = 'result-banner success visible';
+        dot.className = 'dot ok';
+        content.innerHTML = `
+          <div class="result-row">
+            <div>
+              <div class="result-label">Verification Result</div>
+              <div class="verify-status ok">✓ Valid</div>
+              <div style="font-size:12px;color:var(--muted);margin-top:6px;font-family:var(--mono);">Check character '${checkCh}' is correct</div>
+            </div>
+            <div style="text-align:right;">
+              <div class="result-label">DIN</div>
+              <div class="full-din-display">${data13.slice(0,5)} ${data13.slice(5,7)} ${data13.slice(7,13)} <span class="check-highlight">${checkCh}</span> ${flag}</div>
+            </div>
+          </div>
+        `;
+      } else {
+        banner.className = 'result-banner error visible';
+        dot.className = 'dot warn';
+        content.innerHTML = `
+          <div class="result-row">
+            <div>
+              <div class="result-label">Verification Result</div>
+              <div class="verify-status fail">✗ Invalid</div>
+              <div style="font-size:12px;color:var(--muted);margin-top:6px;font-family:var(--mono);">Expected '${res.expected}', found '${checkCh}'</div>
+            </div>
+            <div style="text-align:right;">
+              <div class="result-label">Corrected DIN</div>
+              <div class="full-din-display">${data13.slice(0,5)} ${data13.slice(5,7)} ${data13.slice(7,13)} <span class="check-highlight">${res.expected}</span> ${flag}</div>
+            </div>
+          </div>
+        `;
+      }
+      renderStepsTable(res.steps, res.finalP, res.checkValue, res.expected);
+      document.getElementById('stepsToggle').style.display = 'flex';
+      renderFormatDiagram(stripped.padEnd(16, '·'));
+    }
+  }
+
+  function renderStepsTable(steps, finalP, checkValue, checkChar) {
+    const body = document.getElementById('stepsBody');
+    let html = '';
+    steps.forEach(s => {
+      const isLast = s.idx === steps.length;
+      html += `
+        <tr>
+          <td class="val-cell">${s.idx}</td>
+          <td class="char-cell">${s.char}</td>
+          <td class="val-cell">${s.value}</td>
+          <td class="calc-cell">${s.calc}</td>
+          <td class="${isLast ? 'p-cell-final' : 'p-cell'}">${s.result}</td>
+        </tr>
+      `;
+    });
+    // Solve row
+    html += `
+      <tr class="solve-row">
+        <td class="val-cell">—</td>
+        <td class="char-cell" style="color:var(--red);">${checkChar}</td>
+        <td class="val-cell">${checkValue}</td>
+        <td class="calc-cell" style="color:var(--text);">(2×${finalP} + ${checkValue}) mod 37 = 1</td>
+        <td class="p-cell" style="color:var(--green);">1 ✓</td>
+      </tr>
+    `;
+    body.innerHTML = html;
+  }
+
+  function toggleSteps() {
+    stepsOpen = !stepsOpen;
+    const toggle = document.getElementById('stepsToggle');
+    const wrap   = document.getElementById('stepsWrap');
+    toggle.classList.toggle('open', stepsOpen);
+    wrap.classList.toggle('open', stepsOpen);
+    toggle.querySelector('span:last-child').textContent = stepsOpen
+      ? 'Hide step-by-step calculation'
+      : 'Show step-by-step calculation';
+  }
+
+  function copyDIN(din, btn) {
+    navigator.clipboard.writeText(din).then(() => {
+      btn.textContent = 'Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = 'Copy DIN';
+        btn.classList.remove('copied');
+      }, 1800);
+    });
+  }
+
+  // ── Wire up input ──────────────────────────────────────────────────────────
+  document.getElementById('dinInput').addEventListener('input', processInput);
+  document.getElementById('dinInput').addEventListener('paste', () => setTimeout(processInput, 10));
+
+  // Initial diagram
+  renderFormatDiagram('');
+
+  // Pre-fill example
+  // document.getElementById('dinInput').value = 'W1849 25 100564';
+  // processInput();
+</script>
+
+</body>
+</html>

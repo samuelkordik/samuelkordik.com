@@ -1,0 +1,17 @@
+---
+import { getCollection, render } from 'astro:content';
+import Article from '../../layouts/Article.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('writing', (e) => !e.data.draft);
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+const { post } = Astro.props;
+const { Content, headings } = await render(post);
+const d = post.data;
+---
+<Article title={d.title} description={d.description} eyebrow="Writing" pubDate={d.pubDate} updatedDate={d.updatedDate} meta={d.tags.map((t) => `#${t}`)} headings={headings} image={d.cover}>
+  <Content />
+  <p slot="after" class="back"><a class="link" href="/writing/">All writing</a></p>
+</Article>
+<style>.back { margin-top: 56px; }</style>

@@ -1,0 +1,40 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+
+const posts = (await getCollection('writing', (e) => !e.data.draft)).sort((a, b) => +b.data.pubDate - +a.data.pubDate);
+const byYear = Object.entries(
+  posts.reduce<Record<string, typeof posts>>((acc, p) => {
+    (acc[p.data.pubDate.getUTCFullYear()] ??= []).push(p);
+    return acc;
+  }, {}),
+).sort(([a], [b]) => +b - +a);
+const fmt = (d: Date) => d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' });
+---
+<Base title="Writing" description="Essays and notes on EMS, data analysis, teaching, and tools.">
+  <div class="wrap">
+    <header class="page-head">
+      <p class="eyebrow">Writing</p>
+      <h1>Essays &amp; notes</h1>
+      <p class="lede">On EMS, data analysis, education, building things, and the tools I use. Subscribe with <a class="link" href="/rss.xml">RSS</a>.</p>
+    </header>
+    {byYear.map(([year, list]) => (
+      <section class="year">
+        <h2>{year}</h2>
+        <ul class="post-list">
+          {list.map((p) => (
+            <li>
+              <time datetime={p.data.pubDate.toISOString()}>{fmt(p.data.pubDate)}</time>
+              <div><a href={`/writing/${p.id}/`}>{p.data.title}</a><p>{p.data.description}</p></div>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))}
+  </div>
+</Base>
+<style>
+  .year { display: grid; grid-template-columns: 160px minmax(0, 1fr); gap: 24px; margin-bottom: 56px; max-width: 1000px; }
+  .year h2 { font-size: var(--h3); color: var(--accent-text); padding-top: 14px; }
+  @media (max-width: 700px) { .year { grid-template-columns: minmax(0, 1fr); gap: 8px; } }
+</style>
