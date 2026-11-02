@@ -22,8 +22,8 @@ const yearsWord = years <= 20 ? words[years] : years < 30 ? `Twenty-${words[year
 
 const pillars = [
   { img: portraitUniform, pos: '50% 20%', eyebrow: 'Lead', title: 'EMS quality management and leadership', text: 'Building cultures of EMS excellence and uncovering the hidden drivers of system quality in EMS.', href: '/about/' },
-  { img: chart, pos: '50% 0%', eyebrow: 'Analyze', title: 'Data that changes decisions', text: 'Dashboards, R, and visual storytelling that turn backlogs and payroll tables into action.', href: '/work/' },
-  { img: training, pos: '50% 50%', eyebrow: 'Teach', title: 'Education that sticks', text: 'Paramedic program director, Texas DSHS Advanced Course Coordinator, and instructor for ACLS, PHTLS, AMLS and more.', href: '/teaching/' },
+  { img: chart, pos: '50% 0%', eyebrow: 'Analyze', title: 'Guiding decisions with data', text: 'Data analysis, dashboards, and visual storytelling that turn data into action.', href: '/work/' },
+  { img: training, pos: '50% 50%', eyebrow: 'Teach', title: 'Effective education', text: 'Paramedic program director, Texas DSHS Advanced Course Coordinator, and experienced CE instructor.', href: '/teaching/' },
 ];
 const learning = [
   { name: 'DaVinci Resolve', note: 'Editing & color' },
@@ -46,7 +46,7 @@ const learning = [
   <section class="wrap pillars">
     <div class="intro">
       <h2>{yearsWord} years in EMS, and still learning.</h2>
-      <p>I lead the Quality Management Division at the Dallas Fire-Rescue Office of the Medical Director. I came up as a paramedic, I’ve been teaching since 2001, and I’ve been paid to hold a camera since 2003.</p>
+      <p>I started out as a paramedic, and my passion for EMS patient care hasn't left me. For the past decade, I've been leading quality management teams at several large EMS systems, and I've been teaching since 2001.</p>
     </div>
     <div class="pgrid">
       {pillars.map((p) => (
@@ -65,9 +65,8 @@ const learning = [
       <figure><Image src={vehicle} alt="Supervisor vehicle under a dramatic sky" widths={[600, 1000]} sizes="(max-width: 700px) 100vw, 60vw" /></figure>
       <div>
         <p class="eyebrow">Photo · Video · Audio</p>
-        <h2>Behind the camera since 2003.</h2>
-        <p class="body">I worked full-time in documentary, photojournalism and marketing before EMS took over, and I still produce training videos and podcasts. Every photo on this site is mine, apart from the ones of me.</p>
-        <p class="pod"><strong>Cypress Creek EMS Podcast</strong><span>On almost every episode</span></p>
+        <h2>Telling Stories with a Camera.</h2>
+        <p class="body">I worked full-time in documentary, photojournalism and marketing before EMS took over, and I still produce training videos and podcasts. Every photo on this site is mine, (except for some of the ones of me).</p>
         <a class="link" href="/work/">See the work</a>
       </div>
     </div>
@@ -76,13 +75,6 @@ const learning = [
   <section class="wrap work">
     <div class="section-head"><h2>Selected work</h2><a class="link" href="/work/">All work</a></div>
     <div class="work-grid">{work.map((w) => <WorkCard entry={w} />)}</div>
-  </section>
-
-  <section class="learn" aria-labelledby="learn-h">
-    <div class="wrap">
-      <h2 id="learn-h">Currently learning</h2>
-      <ul>{learning.map((l) => <li><strong>{l.name}</strong><span>{l.note}</span></li>)}</ul>
-    </div>
   </section>
 
   <section class="wrap split">
@@ -94,8 +86,8 @@ const learning = [
     </div>
     <aside class="teach">
       <p class="eyebrow">Teaching &amp; guides</p>
-      <h3>Free to use</h3>
-      <p class="muted">Guides and course materials I’ve made for students and colleagues.</p>
+      <h3>Resources</h3>
+      <p class="muted">Guides and course materials I’ve made for students and colleagues and am sharing freely.</p>
       <ul>
         {guides.map((g) => <li><a href={`/guides/${g.id}/`}>{g.data.title}</a><small>Guide</small></li>)}
         <li><a href="/teaching/">Course materials</a><small>Teaching</small></li>
